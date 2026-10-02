@@ -10,6 +10,7 @@ a:focus-visible,video:focus-visible,model-viewer:focus-visible{outline:2px solid
 .brand{text-decoration:none;color:var(--fg);display:grid;gap:.3rem}
 .brand b{font:600 1.15rem var(--f);letter-spacing:.2em;text-transform:uppercase}
 .brand span,.meta{font:400 .62rem var(--m);letter-spacing:.12em;text-transform:uppercase;color:var(--mut)}
+#nav a.brand{display:grid;gap:.3rem;padding:0}
 #nav ol{list-style:none;padding:0 0 0 1.1rem;position:relative;display:grid;gap:.15rem}
 #nav ol::before,#nav ol::after{content:"";position:absolute;left:0;top:.3rem;bottom:.3rem;width:1px;background:var(--line)}
 #nav ol::after{background:var(--red);transform:scaleY(var(--p));transform-origin:top}
