@@ -34,7 +34,7 @@ const build = () => {
   const nn = (i) => String(i + 1).padStart(2, '0');
   ol.innerHTML = secs.map((s, i) => `<li><a href="#${s.id}"><em>${nn(i)}</em>${s.dataset.title}</a></li>`).join('');
   secs.forEach((s, i) => { const l = $('.sh .lab', s)[0]; if (l) l.textContent = `${nn(i)} / ${s.dataset.title}`; });
-  links = $('#nav a');
+  links = $('#nav ol a');
   io.disconnect(); cur = -1;
   secs.forEach((s) => io.observe(s));
 };
