@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Spindle Project: Scratch-Built Supersonic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header id="hd"><a class="logo" href="#top">SPINDLE</a><span id="hud" aria-hidden="true"></span><i class="prog" aria-hidden="true"></i></header>
+<nav id="nav" aria-label="Sections"><ol></ol></nav>
+
+<main>
+<section id="top" class="panel shade" data-title="Spindle">
+  <img class="bg" src="supersonic rendered image.png" alt="OpenRocket render of the rocket climbing under power">
+  <div class="c">
+    <p class="eyebrow rv">The Spindle Project</p>
+    <h1 class="rv" style="--i:1">Spindle</h1>
+    <p class="sub rv" style="--i:2">Scratch-built supersonic rocket</p>
+    <a class="btn rv" style="--i:3" href="#specs">Explore the build</a>
+  </div>
+  <p class="note">OpenRocket render, default colors, before paint</p>
+</section>
+
+<section id="specs" class="panel" data-title="Overview">
+  <div class="c">
+    <p class="eyebrow rv">Overview</p>
+    <h2 class="rv" style="--i:1">Built to break Mach 1</h2>
+    <div class="stats rv" style="--i:2">
+      <div><b><span data-count="1687">0</span><u>mm</u></b><small>Length, 66.4 in</small></div>
+      <div><b><span data-count="41.8" data-dec="1">0</span><u>mm</u></b><small>Body diameter, 1.65 in</small></div>
+      <div><b><span data-count="1.13" data-dec="2">0</span><u>Mach</u></b><small>Predicted maximum</small></div>
+      <div><b><span data-count="1769">0</span><u>m</u></b><small>Predicted apogee, 5,802 ft</small></div>
+    </div>
+    <figure class="rv" style="--i:3"><svg id="rocket" viewBox="-4 0 852 108" role="img" aria-label="Side profile of the rocket, drawn to scale from the OpenRocket file"></svg><figcaption>Profile drawn to scale from the OpenRocket model</figcaption></figure>
+  </div>
+</section>
+
+<section id="design" class="panel shade" data-title="Design">
+  <img class="bg" src="supersonic simulation image.png" alt="OpenRocket simulation view of the rocket under power">
+  <div class="c">
+    <p class="eyebrow rv">Design</p>
+    <h2 class="rv" style="--i:1">Designed in simulation</h2>
+    <p class="rv" style="--i:2">The airframe was modeled in OpenRocket with a 1 m launch rod and 2 m/s wind. The view behind shows the model in OpenRocket's default colors, before the final paint.</p>
+    <div class="stats rv" style="--i:3">
+      <div><b><span data-count="162.6" data-dec="1">0</span><u>mm</u></b><small>Fiberglass ogive nose</small></div>
+      <div><b><span data-count="624">0</span><u>mm</u></b><small>Forward bay</small></div>
+      <div><b><span data-count="900">0</span><u>mm</u></b><small>Fin can</small></div>
+    </div>
+  </div>
+</section>
+
+<section id="model" class="panel pending" data-title="3D model">
+  <div class="c">
+    <p class="eyebrow rv">3D model</p>
+    <h2 class="rv" style="--i:1">Explore the airframe</h2>
+    <!-- Export your CAD as GLB (Fusion, Onshape, FreeCAD or Blender can convert STEP) and save it as media/spindle.glb. The section only appears if the file loads. -->
+    <figure class="frame rv" style="--i:2"><div class="wipe"><model-viewer src="media/spindle.glb" alt="3D model of the Spindle rocket" camera-controls auto-rotate auto-rotate-delay="1500" shadow-intensity="0" loading="eager" interaction-prompt="none"></model-viewer></div><figcaption>Interactive CAD model. Drag to rotate, scroll to zoom.</figcaption></figure>
+  </div>
+</section>
+
+<section id="fincan" class="panel split" data-title="Fin can">
+  <div class="c">
+    <p class="eyebrow rv">Build</p>
+    <h2 class="rv" style="--i:1">Modeling the fin can</h2>
+    <p class="rv" style="--i:2">The fin can is the 900 mm aft section. It carries the motor mount, the parachute and the fin set, so it was modeled first.</p>
+  </div>
+  <figure class="frame rv" style="--i:2"><div class="wipe"><video data-auto src="media/fin_can_modeling.mov" controls muted loop playsinline preload="metadata"></video></div><figcaption>Screen recording of the fin can model</figcaption></figure>
+</section>
+
+<section id="fins" class="panel split" data-title="Fins">
+  <div class="c">
+    <p class="eyebrow rv">Build</p>
+    <h2 class="rv" style="--i:1">Printing the fins</h2>
+    <p class="rv" style="--i:2">Three trapezoidal fins, printed in PETG at 100% infill and 4 mm thick.</p>
+    <div class="tbl rv" style="--i:3">
+      <div class="row"><b>Root chord</b><p>177.8 mm</p></div>
+      <div class="row"><b>Tip chord</b><p>50.8 mm</p></div>
+      <div class="row"><b>Span</b><p>50.8 mm</p></div>
+      <div class="row"><b>Sweep</b><p>25.4 mm</p></div>
+    </div>
+  </div>
+  <figure class="frame rv" style="--i:2"><div class="wipe"><video data-auto src="fin printing timelapse.mp4" controls muted loop playsinline preload="metadata"></video></div><figcaption>Fin print timelapse</figcaption></figure>
+</section>
+
+<section id="bulkhead" class="panel split" data-title="Bulkhead">
+  <div class="c">
+    <p class="eyebrow rv">Structure</p>
+    <h2 class="rv" style="--i:1">The bulkhead</h2>
+    <p class="big rv" style="--i:2">A bulkhead in the lower body holds the fin can and body together, and still lets ejection gas through.</p>
+  </div>
+  <div class="tbl num rv" style="--i:3">
+    <div class="row"><b>Retains</b><p>It locks the fin can to the body so the two sections stay together.</p></div>
+    <div class="row"><b>Inspired by Virgo</b><p>The design follows the bulkhead from MIT's Virgo rocket.</p></div>
+    <div class="row"><b>Ported</b><p>Unlike the Virgo bulkhead, it is open to ejection gases, so they pass through to the recovery system.</p></div>
+  </div>
+</section>
+
+<section id="systems" class="panel" data-title="Systems">
+  <div class="c">
+    <p class="eyebrow rv">Systems</p>
+    <h2 class="rv" style="--i:1">Inside the airframe</h2>
+    <div class="tbl rv" style="--i:2">
+      <div class="row"><b>Forward bay</b><p>624 mm filament-wound fiberglass. Avionics sled, altimeter, switch and battery.</p></div>
+      <div class="row"><b>Motor mount</b><p>380 mm fiberglass tube with an AeroPack RA38P retainer.</p></div>
+      <div class="row"><b>Recovery</b><p>36 in ripstop nylon parachute, Nomex protector and shock cord.</p></div>
+      <div class="row"><b>Nose cone</b><p>Fiberglass ogive, 162.6 mm long.</p></div>
+      <div class="row"><b>Rail buttons</b><p>Two Delrin buttons.</p></div>
+      <div class="row"><b>Motor</b><p>Cesaroni 634I540-16A, 38 mm.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="finish" class="panel shade" data-title="Finish">
+  <!-- Add media/paint.jpg to show your painted rocket; the image removes itself if the file is missing. -->
+  <img class="bg" src="media/paint.jpg" alt="The painted rocket" onerror="this.remove()">
+  <div class="c">
+    <p class="eyebrow rv">Finish</p>
+    <h2 class="rv" style="--i:1">Red <span class="red">and</span> black</h2>
+    <p class="rv" style="--i:2">The final paint scheme is red and black.</p>
+  </div>
+</section>
+
+<section id="launch" class="panel shade" data-title="Launch">
+  <!-- Add media/launch.jpg to show a launch photo; the image removes itself if the file is missing. -->
+  <img class="bg" src="media/launch.jpg" alt="The rocket at launch" onerror="this.remove()">
+  <div class="c">
+    <p class="eyebrow rv">Launch</p>
+    <h2 class="rv" style="--i:1">Launch profile</h2>
+    <p class="rv" style="--i:2">OpenRocket predictions for a 1 m launch rod and 2 m/s wind.</p>
+    <div class="stats rv" style="--i:3">
+      <div><b><span data-count="1769">0</span><u>m</u></b><small>Apogee, 5,802 ft</small></div>
+      <div><b><span data-count="383">0</span><u>m/s</u></b><small>Maximum speed, 857 mph</small></div>
+      <div><b><span data-count="1.13" data-dec="2">0</span><u>Mach</u></b><small>Maximum Mach number</small></div>
+      <div><b><span data-count="41.5" data-dec="1">0</span><u>g</u></b><small>Peak acceleration</small></div>
+      <div><b><span data-count="15.5" data-dec="1">0</span><u>s</u></b><small>Time to apogee</small></div>
+      <div><b><span data-count="6.5" data-dec="1">0</span><u>m/s</u></b><small>Landing speed, 21 ft/s</small></div>
+    </div>
+    <a class="btn rv" style="--i:4" href="#top">Back to top</a>
+  </div>
+</section>
+</main>
+<footer>The Spindle Project. Specifications from the OpenRocket model.</footer>
+<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
