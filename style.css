@@ -103,3 +103,9 @@ model-viewer{width:100%;height:min(66vh,620px);--poster-color:transparent;backgr
 footer{margin-left:var(--rail);padding:2.4rem clamp(1.4rem,5vw,4rem);border-top:1px solid var(--line);font:400 .62rem var(--m);letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
 @media(max-width:1000px){html{scroll-padding-top:3.2rem}:root{--rail:0px}#nav{inset:0 0 auto 0;width:100%;flex-direction:row;align-items:center;gap:1.2rem;padding:.7rem 1rem;border-right:0;border-bottom:1px solid var(--line)}.brand span,.meta,#nav a em{display:none}#nav ol{display:flex;overflow-x:auto;padding:0;gap:1rem}#nav ol::before,#nav ol::after{display:none}#nav a{white-space:nowrap}#nav .on{transform:none}main{padding-top:3.2rem}.sh,.two,.dl,.cards{grid-template-columns:1fr}.sh p{justify-self:start}.ribbon{grid-template-columns:1fr 1fr}.stack .r{grid-template-columns:1fr}.hero-img{width:100%;opacity:.5}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}body{transition:none}.js .rv,.js .in .rv,.js .hero-img,.js .hero.in .hero-img{opacity:1;transform:none;transition:none}.js .mk{clip-path:none;transition:none}#rocket path{stroke-dashoffset:0;animation:none!important}#rocket text{opacity:1;animation:none!important}}
+
+.sim{position:relative;cursor:pointer}
+.sim video{position:absolute;inset:0;width:100%;height:100%;aspect-ratio:auto;object-fit:contain;background:#000;opacity:0;transition:opacity .6s;pointer-events:none}
+.sim.playing video{opacity:1}
+.sim::after{content:"\21BB  Replay";position:absolute;right:1rem;bottom:1rem;z-index:1;padding:.5rem .8rem;border:1px solid #ffffff55;background:#000a;color:#fff;font:500 .62rem var(--m);letter-spacing:.14em;text-transform:uppercase;transition:opacity .4s}
+.sim.playing::after{opacity:0}
