@@ -96,3 +96,23 @@ land();
 addEventListener('load', () => { land(); setTimeout(land, 300); }, { once: true });
 /* Keep the URL hash in step with the active section so a reload returns to it */
 ol.addEventListener('click', (e) => { const a = e.target.closest('a'); if (a) history.replaceState(null, '', a.getAttribute('href')); });
+
+/* Design: play the simulation once, settle back on the still, replay on click */
+(() => {
+  const mk = $('.sim')[0];
+  if (!mk) return;
+  const v = $('video', mk)[0];
+  const play = () => {
+    if (mk.classList.contains('playing')) return;
+    v.currentTime = 0;
+    v.play().then(() => mk.classList.add('playing')).catch(() => {});
+  };
+  v.addEventListener('ended', () => mk.classList.remove('playing'));
+  v.addEventListener('error', () => mk.classList.remove('playing'));
+  mk.addEventListener('click', play);
+  mk.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); play(); } });
+  const o = new IntersectionObserver((es) => {
+    if (es[0].isIntersecting) { o.disconnect(); if (!reduce) setTimeout(play, 1200); }
+  }, { threshold: 0.5 });
+  o.observe(mk);
+})();
