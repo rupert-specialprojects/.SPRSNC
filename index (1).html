@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Spindle Project: Scratch-Built Supersonic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="boot" aria-hidden="true"><div><b>SPINDLE</b><i></i></div></div>
+<canvas id="fx" aria-hidden="true"></canvas>
+<div class="scan" aria-hidden="true"></div>
+<div class="bar" aria-hidden="true"><i></i></div>
+<div id="hud" aria-hidden="true"></div>
+<nav id="nav" aria-label="Sections"><ol></ol></nav>
+
+<main>
+<section id="top" data-title="Pad" class="hero">
+  <p class="tag">SCRATCH-BUILT SUPERSONIC ROCKET</p>
+  <h1 data-split aria-label="Spindle">SPINDLE</h1>
+  <svg id="rocket" viewBox="-4 0 852 108" role="img" aria-label="Side profile of the rocket, drawn to scale from the OpenRocket file"></svg>
+  <p>A 1.69 m fiberglass rocket with 3D-printed fins, designed in OpenRocket to pass Mach 1. Scroll through the design, build and launch.</p>
+</section>
+
+<section id="specs" data-title="Overview">
+  <h2 data-scr>Built to break Mach 1</h2>
+  <p>Every figure here comes from the OpenRocket model of the build.</p>
+  <div class="grid">
+    <div><b data-count="1687">0</b><small>mm overall length</small></div>
+    <div><b data-count="41.8" data-dec="1">0</b><small>mm body diameter</small></div>
+    <div><b>I-class</b><small>Cesaroni 634I540-16A, 38 mm</small></div>
+    <div><b data-count="3">0</b><small>PETG fins, 4 mm thick</small></div>
+    <div><b data-count="36">0</b><small>inch ripstop nylon parachute</small></div>
+    <div><b data-count="1.13" data-dec="2">0</b><small>Mach predicted</small></div>
+  </div>
+</section>
+
+<section id="design" data-title="Design">
+  <h2 data-scr>Designed in simulation</h2>
+  <p>The airframe was modeled in OpenRocket: a 162.6 mm fiberglass ogive nose, a 624 mm forward bay and a 900 mm fin can. Flights were simulated with a 1 m launch rod and 2 m/s wind. These renders show the model in OpenRocket's default colors, before the final paint.</p>
+  <div class="two">
+    <figure><div class="wipe"><img src="supersonic rendered image.png" alt="OpenRocket render of the rocket under power" loading="lazy"></div><figcaption>OpenRocket render, boost phase</figcaption></figure>
+    <figure><div class="wipe"><img src="supersonic simulation image.png" alt="OpenRocket simulation view of the rocket under power" loading="lazy"></div><figcaption>OpenRocket simulation view</figcaption></figure>
+  </div>
+</section>
+
+<section id="model" data-title="3D model" class="pending">
+  <h2 data-scr>Explore the airframe</h2>
+  <p>The full CAD model. Drag to rotate and scroll to zoom.</p>
+  <!-- Export your CAD as GLB (Fusion, Onshape, FreeCAD or Blender can convert STEP) and save it as media/spindle.glb. The section only appears if the file loads. -->
+  <figure><div class="wipe"><model-viewer src="media/spindle.glb" alt="3D model of the Spindle rocket" camera-controls auto-rotate auto-rotate-delay="1500" shadow-intensity="0" loading="eager" interaction-prompt="none"></model-viewer></div><figcaption>Interactive CAD model</figcaption></figure>
+</section>
+
+<section id="fincan" data-title="Fin can">
+  <h2 data-scr>Modeling the fin can</h2>
+  <p>The fin can is the 900 mm aft section. It carries the motor mount, the parachute and the fin set, so it was modeled first.</p>
+  <figure><div class="wipe"><video data-auto src="media/fin_can_modeling.mov" controls muted loop playsinline preload="metadata"></video></div><figcaption>Screen recording of the fin can model</figcaption></figure>
+</section>
+
+<section id="fins" data-title="Fins">
+  <h2 data-scr>Printing the fins</h2>
+  <p>Three trapezoidal fins, printed in PETG at 100% infill and 4 mm thick. Root chord 177.8 mm, tip chord 50.8 mm, span 50.8 mm, sweep 25.4 mm.</p>
+  <figure><div class="wipe"><video data-auto src="fin printing timelapse.mp4" controls muted loop playsinline preload="metadata"></video></div><figcaption>Fin print timelapse</figcaption></figure>
+</section>
+
+<section id="bulkhead" data-title="Bulkhead">
+  <h2 data-scr>The bulkhead</h2>
+  <p class="big">A bulkhead in the lower body holds the fin can and body together, and still lets ejection gas through.</p>
+  <div class="pts">
+    <div><b>Retains</b>It locks the fin can to the body so the two sections stay together.</div>
+    <div><b>Inspired by Virgo</b>The design follows the bulkhead from MIT's Virgo rocket.</div>
+    <div><b>Ported</b>Unlike the Virgo bulkhead, it is open to ejection gases, so they pass through to the recovery system.</div>
+  </div>
+</section>
+
+<section id="systems" data-title="Systems">
+  <h2 data-scr>Inside the airframe</h2>
+  <div class="grid">
+    <div><b>Forward bay</b><small>624 mm filament-wound fiberglass. Avionics sled, altimeter, switch and battery.</small></div>
+    <div><b>Motor mount</b><small>380 mm fiberglass tube with an AeroPack RA38P retainer.</small></div>
+    <div><b>Recovery</b><small>36 in ripstop nylon parachute, Nomex protector and shock cord.</small></div>
+    <div><b>Nose cone</b><small>Fiberglass ogive, 162.6 mm long.</small></div>
+    <div><b>Rail buttons</b><small>Two Delrin buttons.</small></div>
+  </div>
+</section>
+
+<section id="finish" data-title="Finish">
+  <h2 data-scr>Red and black</h2>
+  <p class="big">The final paint scheme is red and black.</p>
+  <!-- Add media/paint.jpg to show your painted rocket; the figure removes itself if the file is missing. -->
+  <figure><div class="wipe"><img src="media/paint.jpg" alt="The painted rocket" loading="lazy" onerror="this.closest('figure').remove()"></div></figure>
+</section>
+
+<section id="launch" data-title="Launch">
+  <h2 data-scr>Launch profile</h2>
+  <p>OpenRocket predictions for a 1 m launch rod and 2 m/s wind.</p>
+  <div class="grid">
+    <div><b data-count="1769">0</b><small>m apogee (5,802 ft)</small></div>
+    <div><b data-count="383">0</b><small>m/s maximum speed</small></div>
+    <div><b data-count="1.13" data-dec="2">0</b><small>maximum Mach number</small></div>
+    <div><b data-count="41.5" data-dec="1">0</b><small>g peak acceleration</small></div>
+    <div><b data-count="15.5" data-dec="1">0</b><small>s to apogee</small></div>
+    <div><b data-count="6.5" data-dec="1">0</b><small>m/s landing speed</small></div>
+  </div>
+  <!-- Add media/launch.jpg to show a launch photo; it removes itself if the file is missing. -->
+  <figure><div class="wipe"><img src="media/launch.jpg" alt="The rocket at launch" loading="lazy" onerror="this.closest('figure').remove()"></div></figure>
+</section>
+</main>
+<footer>Specifications from the OpenRocket model.</footer>
+<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
