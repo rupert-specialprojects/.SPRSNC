@@ -19,6 +19,7 @@ a:focus-visible,video:focus-visible,model-viewer:focus-visible{outline:2px solid
 #nav a:hover,#nav .on{color:var(--fg)}
 #nav .on{transform:translateX(6px)}
 #nav .on em{color:var(--red)}
+#nav ol{margin:auto 0}
 /* layout */
 main{margin-left:var(--rail);overflow-x:clip}
 section{padding:clamp(5rem,13vh,9rem) 0;position:relative}
