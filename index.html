@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Spindle Project: Scratch-Built Supersonic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script>document.documentElement.classList.add("js");setTimeout(function(){document.documentElement.classList.add("ready")},1500)</script>
+<link rel="stylesheet" href="style.css?v=7">
+</head>
+<body>
+<nav id="nav" aria-label="Sections">
+  <a class="brand" href="#top"><b>Spindle</b><span>Scratch-built supersonic</span></a>
+  <ol></ol>
+  <p class="meta">A personal project</p>
+</nav>
+
+<main>
+<section id="top" class="hero" data-title="Spindle">
+  <img class="hero-img" src="supersonic rendered image.png" width="2048" height="1480" alt="OpenRocket render of the rocket climbing under power">
+  <div class="wrap">
+    <p class="lab rv">rupert purchase</p>
+    <h1 class="rv" style="--i:1">Spindle</h1>
+    <p class="lead rv" style="--i:2">A scratch-built, high-power rocket designed to pass Mach 1. Follow the design, build and launch.</p>
+    <a class="btn rv" style="--i:3" href="#specs">Explore the build <span aria-hidden="true">&rarr;</span></a>
+  </div>
+  <p class="cap">OpenRocket render, default colors, before paint</p>
+  <div class="ribbon">
+    <div><b><span data-count="1687">1,687</span><u>mm</u></b><small>Overall length</small></div>
+    <div><b><span data-count="41.8" data-dec="1">41.8</span><u>mm</u></b><small>Body diameter</small></div>
+    <div><b><span data-count="1.13" data-dec="2">1.13</span><u>Mach</u></b><small>Top speed</small></div>
+    <div><b><span data-count="1769">1,769</span><u>m</u></b><small>Apogee</small></div>
+  </div>
+</section>
+
+<section id="specs" class="paper" data-title="Overview">
+  <div class="wrap">
+    <header class="sh"><p class="lab rv"></p><h2 class="rv" style="--i:1">Built to break Mach 1</h2><p class="rv" style="--i:2"></p></header>
+    <div class="draw rv" style="--i:3"><svg id="rocket" viewBox="-4 0 852 108" role="img" aria-label="Side profile of the rocket, drawn to scale from the OpenRocket file"></svg></div>
+    <dl class="dl rv" style="--i:4">
+      <div class="r"><dt>Overall length</dt><dd>1,687 mm <i>66.4 in</i></dd></div>
+      <div class="r"><dt>Body diameter</dt><dd>41.8 mm <i>1.65 in</i></dd></div>
+      <div class="r"><dt>Nose cone</dt><dd>162.6 mm <i>ogive</i></dd></div>
+      <div class="r"><dt>Forward bay</dt><dd>624 mm <i>24.6 in</i></dd></div>
+      <div class="r"><dt>Fin can</dt><dd>900 mm <i>35.4 in</i></dd></div>
+      <div class="r"><dt>Fins</dt><dd>3 <i>trapezoidal, PETG</i></dd></div>
+    </dl>
+  </div>
+</section>
+
+<section id="buildlog" class="alt" data-title="Build log">
+  <div class="wrap">
+    <header class="sh"><p class="lab rv"></p><h2 class="rv" style="--i:1">The build log</h2><p class="rv" style="--i:2">A video walkthrough of how Spindle was designed, built and finished.</p></header>
+    <!-- Paste your YouTube link or video ID into data-yt below. While it is empty, the player shows "Video coming soon". -->
+    <figure class="fig rv" style="--i:2"><div class="mk"><button type="button" class="yt" data-yt="" aria-label="Play the build log video"><span class="play" aria-hidden="true"></span><span class="soon">Video coming soon</span></button></div><figcaption>Spindle build log</figcaption></figure>
+  </div>
+</section>
+
+<section id="design" data-title="Design">
+  <div class="wrap">
+    <header class="sh"><p class="lab rv"></p><h2 class="rv" style="--i:1">Designed in simulation</h2><p class="rv" style="--i:2">The airframe was modeled and flown in OpenRocket before any material was cut. The view below shows the model in OpenRocket's default colors, before the final paint.</p></header>
+    <div class="two">
+      <figure class="fig rv" style="--i:2">
+        <div class="mk sim" role="button" tabindex="0" aria-label="Replay the simulation video"><img src="supersonic simulation image.png" width="2048" height="1480" alt="OpenRocket simulation view of the rocket under power"><video src="SPRSNC photo studio.mov" muted playsinline preload="metadata" aria-hidden="true"></video></div>
+        <figcaption>OpenRocket simulation. Click to replay.</figcaption>
+      </figure>
+      <dl class="dl one rv" style="--i:3">
+        <div class="r"><dt>Projected top speed</dt><dd>Mach 1.13</dd></div>
+        <div class="r"><dt>Predicted mass</dt><dd>966 g</dd></div>
+        <div class="r"><dt>Motor</dt><dd>634I540-16A</dd></div>
+        <div class="r"><dt>Predicted apogee</dt><dd>1,769 m</dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<section id="model" class="pending" data-title="3D model">
+  <div class="wrap">
+    <header class="sh"><p class="lab rv"></p><h2 class="rv" style="--i:1">Explore the airframe</h2><p class="rv" style="--i:2">The full CAD model. Drag to rotate and scroll to zoom.</p></header>
+    <!-- Export your CAD as GLB (Fusion, Onshape, FreeCAD or Blender can convert STEP) and save it as media/spindle.glb. The section only appears if the file loads. -->
+    <figure class="fig rv" style="--i:2"><div class="mk"><model-viewer src="supersonicwhole.glb" alt="3D model of the Spindle rocket" camera-controls auto-rotate auto-rotate-delay="1500" shadow-intensity="0" loading="eager" interaction-prompt="none"></model-viewer></div><figcaption>Interactive CAD model</figcaption></figure>
+  </div>
+</section>
+
+<section id="fincan" class="alt" data-title="Fins">
+  <div class="wrap">
+    <header class="sh"><p class="lab rv"></p><h2 class="rv" style="--i:1">Explore the fins</h2><p class="rv" style="--i:2">The fins' CAD model. Drag to rotate and scroll to zoom.</p></header>
+    <!-- Export your CAD as GLB (Fusion, Onshape, FreeCAD or Blender can convert STEP) and save it as media/spindle.glb. The section only appears if the file loads. -->
+    <figure class="fig rv" style="--i:2"><div class="mk"><model-viewer src="fin can 3 parts.glb" alt="3D model of the Spindle rocket" camera-controls auto-rotate auto-rotate-delay="1500" shadow-intensity="0" loading="eager" interaction-prompt="none"></model-viewer></div><figcaption>Interactive CAD model</figcaption></figure>
+  </div>
+</section>
+
+<section id="fins" class="alt" data-title="Printing Fins">
+  <div class="wrap">
+    <header class="sh"><p class="lab rv"></p><h2 class="rv" style="--i:1">Printing the fins</h2><p class="rv" style="--i:2">Three trapezoidal fins, printed in PETG at 100% infill and 4 mm thick.</p></header>
+    <div class="two flip">
+      <figure class="fig rv" style="--i:2"><div class="mk"><video data-auto src="fin printing timelapse.mp4" controls muted loop playsinline preload="metadata"></video></div><figcaption>Fin print timelapse</figcaption></figure>
+      <dl class="dl one rv" style="--i:3">
+        <div class="r"><dt>Root chord</dt><dd>177.8 mm</dd></div>
+        <div class="r"><dt>Tip chord</dt><dd>50.8 mm</dd></div>
+        <div class="r"><dt>Span</dt><dd>50.8 mm</dd></div>
+        <div class="r"><dt>Sweep</dt><dd>25.4 mm</dd></div>
+        <div class="r"><dt>Thickness</dt><dd>4 mm</dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<section id="bulkhead" data-title="Bulkhead">
+  <div class="wrap">
+    <header class="sh"><p class="lab rv"></p><h2 class="rv" style="--i:1">The bulkhead</h2><p class="rv" style="--i:2">A bulkhead in the lower body holds the fin can and body together, and still lets ejection gas through.</p></header>
+    <div class="cards rv" style="--i:3">
+      <div><span class="n">01</span><h3>Retains</h3><p>The entire lower half of the rocket, i.e. fin can</p></div>
+      <div><span class="n">02</span><h3>Inspired by Virgo</h3><p>The design follows the bulkhead from MIT's Virgo rocket.</p></div>
+      <div><span class="n">03</span><h3>Ported</h3><p>Unlike the Virgo bulkhead, it is fortified/modified to let hot ejection gases pass through.</p></div>
+    </div>
+    <header class="sh"><p class="lab rv"></p><h2 class="rv" style="--i:1"></h2><p class="rv" style="--i:2">The bulkhead.</p></header>
+    <!-- Export your CAD as GLB (Fusion, Onshape, FreeCAD or Blender can convert STEP) and save it as media/spindle.glb. The section only appears if the file loads. -->
+    <figure class="fig rv" style="--i:2"><div class="mk"><model-viewer src="virgo inspired bulkhead.glb" alt="3D model of the Spindle rocket" camera-controls auto-rotate auto-rotate-delay="1500" shadow-intensity="0" loading="eager" interaction-prompt="none"></model-viewer></div><figcaption>Interactive CAD model</figcaption></figure>
+  
+  </div>
+</section>
+
+<section id="systems" class="paper" data-title="Systems">
+  <div class="wrap">
+    <header class="sh"><p class="lab rv"></p><h2 class="rv" style="--i:1">Inside the airframe</h2></header>
+    <dl class="dl one stack rv" style="--i:2">
+      <div class="r"><dt>Forward bay</dt><dd>624 mm filament-wound fiberglass. Avionics sled, altimeter, switch and battery.</dd></div>
+      <div class="r"><dt>Motor</dt><dd>Cesaroni 634I540-16A, 38 mm.</dd></div>
+      <div class="r"><dt>Motor mount</dt><dd>380 mm fiberglass tube with an AeroPack RA38P retainer.</dd></div>
+      <div class="r"><dt>Recovery</dt><dd>36 in ripstop nylon parachute, Nomex protector and shock cord.</dd></div>
+      <div class="r"><dt>Nose cone</dt><dd>Fiberglass ogive, 162.6 mm long.</dd></div>
+      <div class="r"><dt>Rail buttons</dt><dd>Two 3d-printed rail buttons.</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section id="finish" data-title="Finish">
+  <div class="wrap">
+    <header class="sh"><p class="lab rv"></p><h2 class="rv" style="--i:1">Red and black</h2><p class="rv" style="--i:2">The final paint scheme is red and black.</p></header>
+    <div class="chips rv" style="--i:3"><div class="red"><span>Red</span></div><div><span>Black</span></div></div>
+    <!-- Add media/paint.jpg to show your painted rocket; the figure removes itself if the file is missing. -->
+    <figure class="fig rv" style="--i:4"><div class="mk"><img src="media/paint.jpg" alt="The painted rocket" onerror="this.closest('figure').remove()"></div></figure>
+  </div>
+</section>
+
+<section id="launch" class="alt" data-title="Launch">
+  <div class="wrap">
+    <header class="sh"><p class="lab rv"></p><h2 class="rv" style="--i:1">Launch profile</h2><p class="rv" style="--i:2">OpenRocket predictions for a 1 m launch rod and 2 m/s wind.</p></header>
+    <div class="cards s3 rv" style="--i:3">
+      <div><b><span data-count="1769">1,769</span><u>m</u></b><small>Apogee, 5,802 ft</small></div>
+      <div><b><span data-count="383">383</span><u>m/s</u></b><small>Maximum speed, 857 mph</small></div>
+      <div><b><span data-count="1.13" data-dec="2">1.13</span><u>Mach</u></b><small>Maximum Mach number</small></div>
+      <div><b><span data-count="41.5" data-dec="1">41.5</span><u>g</u></b><small>Peak acceleration</small></div>
+      <div><b><span data-count="15.5" data-dec="1">15.5</span><u>s</u></b><small>Time to apogee</small></div>
+      <div><b><span data-count="6.5" data-dec="1">6.5</span><u>m/s</u></b><small>Landing speed, 21 ft/s</small></div>
+    </div>
+  </div>
+</section>
+<section id="gallery" data-title="Gallery">
+  <div class="wrap">
+    <header class="sh"><p class="lab rv"></p><h2 class="rv" style="--i:1">Launch gallery</h2><p class="rv" style="--i:2">Photos and video from launch day. Select any item to enlarge it.</p></header>
+    <!-- Edit each data-src and the matching src/text to point at your files. Tiles with a missing file show a placeholder. Add or remove tiles freely. -->
+    <div class="gallery rv" style="--i:3">
+      <button type="button" class="tile" data-type="photo" data-src="media/gallery/photo-01.jpg" data-cap="Launch photo 1" aria-label="Launch photo 1"><img src="media/gallery/photo-01.jpg" alt="" loading="lazy" onerror="this.parentElement.classList.add('empty')"><span class="ph">Launch photo 1<br>media/gallery/photo-01.jpg</span></button>
+      <button type="button" class="tile" data-type="photo" data-src="media/gallery/photo-02.jpg" data-cap="Launch photo 2" aria-label="Launch photo 2"><img src="media/gallery/photo-02.jpg" alt="" loading="lazy" onerror="this.parentElement.classList.add('empty')"><span class="ph">Launch photo 2<br>media/gallery/photo-02.jpg</span></button>
+      <button type="button" class="tile" data-type="video" data-src="media/gallery/video-01.mp4" data-cap="Launch video 1" aria-label="Launch video 1"><video src="media/gallery/video-01.mp4#t=0.1" muted playsinline preload="metadata"></video><span class="badge">&#9654; Video</span><span class="ph">Launch video 1<br>media/gallery/video-01.mp4</span></button>
+      <button type="button" class="tile" data-type="photo" data-src="media/gallery/photo-03.jpg" data-cap="Launch photo 3" aria-label="Launch photo 3"><img src="media/gallery/photo-03.jpg" alt="" loading="lazy" onerror="this.parentElement.classList.add('empty')"><span class="ph">Launch photo 3<br>media/gallery/photo-03.jpg</span></button>
+      <button type="button" class="tile" data-type="video" data-src="media/gallery/video-02.mp4" data-cap="Launch video 2" aria-label="Launch video 2"><video src="media/gallery/video-02.mp4#t=0.1" muted playsinline preload="metadata"></video><span class="badge">&#9654; Video</span><span class="ph">Launch video 2<br>media/gallery/video-02.mp4</span></button>
+      <button type="button" class="tile" data-type="photo" data-src="media/gallery/photo-04.jpg" data-cap="Launch photo 4" aria-label="Launch photo 4"><img src="media/gallery/photo-04.jpg" alt="" loading="lazy" onerror="this.parentElement.classList.add('empty')"><span class="ph">Launch photo 4<br>media/gallery/photo-04.jpg</span></button>
+    </div>
+  </div>
+</section>
+</main>
+<dialog id="lb" aria-label="Gallery viewer">
+  <div class="stage"></div>
+  <div class="lbbar"><button type="button" data-a="prev" aria-label="Previous">&larr;</button><span class="lbcap"></span><button type="button" data-a="next" aria-label="Next">&rarr;</button><button type="button" data-a="close" aria-label="Close">&times;</button></div>
+</dialog>
+<footer>The Spindle Project. Specifications from the OpenRocket model.</footer>
+<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+<script src="script.js?v=7"></script>
+</body>
+</html>
