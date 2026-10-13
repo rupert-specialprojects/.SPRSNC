@@ -10,8 +10,8 @@
 ------------------------------------------------------------------- */
 
 window.SITE = {
-  name: "Your name",                 // shown in the footer of the launch panel
-  contact: "you@example.com",        // mailto link
+  name: "Rupert Purchase",                 // shown in the footer of the launch panel
+  contact: "rupert.purchase@outlook.com",        // mailto link
   launchDate: null                   // e.g. "2026-11-08" shows a countdown; null shows "Awaiting launch day"
 };
 
