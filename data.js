@@ -1,14 +1,10 @@
 /* ------------------------------------------------------------------
    Data for the portfolio. Everything the page draws comes from here.
 
-   SITE      your name, contact, and (optional) launch date.
+   SITE      your name, contact, launch date, and location info.
    FLIGHT    OpenRocket 24.12 results, read from supersonic.ork.
    HEAT      peak temperature of each component, read from your MATLAB plots.
-   FLUTTER   your fin flutter script, evaluated with its own inputs.
    VELOCITY  your top-velocity Monte Carlo, with bin counts read off the plot.
-             HEAT and VELOCITY are read off the plot images, so they are
-             accurate to about a tenth of a unit. Paste exact values from
-             MATLAB if you want them to match to the decimal.
 ------------------------------------------------------------------- */
 
 window.SITE = {
@@ -27,7 +23,7 @@ window.PROFILE = [[0.0,0.0,0.0,0.006],[0.02,0.0,2.4,0.009],[0.04,0.1,9.3,0.028],
    group picks the colour: "airframe" (fiberglass) or "fin" (PETG). */
 window.HEAT = {
   petgTg: 80,          // degrees C where PETG starts to soften
-  stagC: 81.7,         // air brought fully to rest at peak speed, from the flutter script
+  stagC: 81.7,         // air brought fully to rest at peak speed
   components: [
     { name: "Nose tip",  station: 0.00, peakC: 67.8, group: "airframe" },
     { name: "Nose cone", station: 0.15, peakC: 53.3, group: "airframe" },
@@ -39,24 +35,8 @@ window.HEAT = {
   ]
 };
 
-/* FLUTTER
-   Output of the fin flutter script (Martin's formula).
-   Brothers, Oregon: 1,414 m site + 224 m at peak speed. */
-window.FLUTTER = {
-  peakSpeed: 383.3,        // m/s, from OpenRocket
-  flutterSpeed: 437.1,     // m/s with G cut by the 0.5 knockdown
-  flutterSpeedFull: 618.1, // m/s with the nominal PETG shear modulus
-  safetyFactor: 1.14,
-  safetyFactorFull: 1.61,
-  required: 1.5,
-  knockdown: 0.5,
-  shearModulusGPa: 0.38,   // after knockdown
-  altitudeAslM: 1638
-};
-
 /* VELOCITY
-   Histogram of top speed over the Monte Carlo runs.
-   counts[i] covers Mach binStart + i * binWidth up to the next bin. */
+   Histogram of top speed over the Monte Carlo runs. */
 window.VELOCITY = {
   N: 500,
   binStart: 1.3638,
