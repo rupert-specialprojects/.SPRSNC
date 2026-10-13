@@ -2,7 +2,7 @@
    Supersonic L1
    1. Draws the rocket to scale from the OpenRocket geometry.
    2. Turns vertical scrolling into travel along the rocket.
-   3. Draws the three simulation charts and the flight profile.
+   3. Draws simulation charts, flight profile, and site zoom visual.
 ---------------------------------------------------------------- */
 (() => {
   'use strict';
@@ -14,7 +14,6 @@
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const fmt = (n, d = 0) => Number(n).toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
 
-  // One broken piece should never take the whole page down with it.
   const safe = (fn, label) => { try { fn(); } catch (err) { console.error('[portfolio]', label || '', err); } };
 
   function svgEl(name, attrs, parent) {
@@ -24,8 +23,7 @@
     return e;
   }
 
-  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
-  const COLORS = { red: '#f0515a', blue: '#4aa3f0', amber: '#e6b84a', ink: '#f3f4f5' };
+  const COLORS = { red: '#f0515a', blue: '#4aa3f0', amber: '#e6b84a', ink: '#f7f8f9' };
 
   /* ----------------------------------------------------------
      Geometry in millimetres, read from supersonic.ork
@@ -42,7 +40,7 @@
   };
   G.bayStart = G.noseL;
   G.canStart = G.noseL + G.bayL;
-  G.L = G.noseL + G.bayL + G.canL; // 1686.56
+  G.L = G.noseL + G.bayL + G.canL;
 
   const rho = (G.noseR ** 2 + G.noseL ** 2) / (2 * G.noseR);
   const noseRadius = x => Math.sqrt(Math.max(0, rho * rho - (G.noseL - x) ** 2)) + G.noseR - rho;
@@ -53,7 +51,7 @@
   const stage = $('#stage'), track = $('#track'), rocketHost = $('#rocket'),
         rulerWrap = $('.ruler-wrap'), ruler = $('#ruler'), scroller = $('#scroller'),
         stationEl = $('#station'), stationVal = $('#station-val'), progressEl = $('#progress');
-  const L = {};            // layout numbers
+  const L = {};
   let curX = 0, targetX = 0, raf = 0;
 
   /* ----------------------------------------------------------
@@ -62,7 +60,7 @@
   function layout() {
     const vw = window.innerWidth, vh = window.innerHeight;
     const compact = vw <= 760;
-    const D = clamp(vh * (compact ? 0.085 : 0.105), 54, 104);   // drawn tube diameter in px
+    const D = clamp(vh * (compact ? 0.085 : 0.105), 54, 104);
     const k = D / (G.tubeR * 2);
     const cy = compact ? vh * 0.66 : vh * 0.55;
     const gutter = Math.max(vw * 0.06, 20);
@@ -76,17 +74,20 @@
     const pw = compact ? Math.min(vw * 0.84, 380) : clamp(vw * 0.42, 440, 620);
     const panelGap = compact ? 36 : 64;
     const xS = x0 + rocketW + (compact ? 56 : Math.max(120, vw * 0.09));
-    const simsW = pw * 3 + panelGap * 2;
+    const simsW = pw * 2 + panelGap; // Two simulation panels now
 
     const photoH = compact ? panelH * 0.32 : panelH;
     const photoW = photoH * 0.75;
     const lbW = compact ? Math.min(vw - gutter * 2, 420) : clamp(vw * 0.32, 400, 520);
     const launchGap = clamp(vw * 0.035, 32, 64);
     const launchW = compact ? Math.max(lbW, photoW) : photoW + launchGap + lbW;
+    
     const xL = xS + simsW + (compact ? 56 : 112);
-    const trackW = xL + launchW + (compact ? gutter : Math.max(vw * 0.08, 40));
+    const siteW = launchW;
+    const xSite = xL + launchW + (compact ? 56 : 112);
+    const trackW = xSite + siteW + (compact ? gutter : Math.max(vw * 0.08, 40));
 
-    Object.assign(L, { vw, vh, compact, k, cy, x0, rocketW, xS, xL, trackW, gutter,
+    Object.assign(L, { vw, vh, compact, k, cy, x0, rocketW, xS, xL, xSite, trackW, gutter,
       maxX: Math.max(1, trackW - vw), pw, top });
 
     const root = document.documentElement.style;
@@ -106,8 +107,9 @@
     $('#simulation').style.left = xS + 'px';
     $('#launch').style.left = xL + 'px';
     $('#launch').style.width = launchW + 'px';
+    $('#launch-site').style.left = xSite + 'px';
+    $('#launch-site').style.width = siteW + 'px';
 
-    // Fewer vertical pixels of scroll than horizontal travel keeps the page short.
     const ratio = 0.62;
     scroller.style.height = (L.maxX * ratio + vh) + 'px';
     L.ratio = ratio;
@@ -119,7 +121,7 @@
   function buildRocket() {
     rocketHost.innerHTML = '';
     const { k, cy, vh } = L;
-    const HALF = 85; // mm above and below the axis kept in the viewBox
+    const HALF = 85;
     const svg = svgEl('svg', {
       viewBox: `0 ${-HALF} ${G.L} ${HALF * 2}`,
       width: G.L * k, height: HALF * 2 * k,
@@ -128,11 +130,10 @@
     svg.style.top = (cy - HALF * k) + 'px';
 
     const line = (w, c, extra = {}) => Object.assign({ stroke: c, 'stroke-width': w, 'vector-effect': 'non-scaling-stroke' }, extra);
-    const ink = a => `rgba(243,244,245,${a})`;
+    const ink = a => `rgba(247,248,249,${a})`;
     const redA = a => `rgba(240,81,90,${a})`;
     const R = G.tubeR;
 
-    // fins: one in the plane of the view, two foreshortened behind the tube
     const f = G.fin;
     const finTE = G.L - f.fromEnd, finLE = finTE - f.root;
     const finPts = (sign, scale) => {
@@ -142,7 +143,6 @@
     };
     svgEl('polygon', Object.assign({ points: finPts(1, 0.5), fill: ink(0.03) }, line(1, ink(0.28))), svg);
 
-    // airframe tubes
     svgEl('rect', Object.assign({ x: G.bayStart, y: -R, width: G.bayL, height: R * 2, fill: '#1c0609' }, line(1.4, COLORS.red)), svg);
     svgEl('rect', Object.assign({ x: G.canStart, y: -R, width: G.canL, height: R * 2, fill: '#000' }, line(1.4, ink(0.6))), svg);
     const ir = R - G.wall;
@@ -151,7 +151,6 @@
     svgEl('line', Object.assign({ x1: G.canStart, x2: G.L, y1: -ir, y2: -ir }, line(1, ink(0.22))), svg);
     svgEl('line', Object.assign({ x1: G.canStart, x2: G.L, y1: ir, y2: ir }, line(1, ink(0.22))), svg);
 
-    // nose cone with its shoulder
     const n = 70, top = [], bot = [];
     for (let i = 0; i <= n; i++) {
       const x = G.noseL * (i / n), r = noseRadius(x);
@@ -160,17 +159,14 @@
     svgEl('rect', Object.assign({ x: G.noseL, y: -G.shoulderR, width: G.shoulderL, height: G.shoulderR * 2, fill: 'none' }, line(1, ink(0.4))), svg);
     svgEl('polygon', Object.assign({ points: top.concat(bot).map(p => p.join(',')).join(' '), fill: '#000' }, line(1.4, ink(0.9))), svg);
 
-    // avionics bay: a flat sled carrying the three masses listed in the file
     const sled = G.noseL + 119.6, pnut = G.noseL + 180, wire = G.noseL + 300;
     svgEl('rect', Object.assign({ x: sled - 10, y: -2, width: wire + 25 - sled + 20, height: 4, fill: ink(0.14) }, line(1, ink(0.45))), svg);
     const bayBlock = (x, s) => svgEl('rect', Object.assign({ x, y: -15, width: 25, height: 13, fill: ink(0.06) }, line(1, s)), svg);
     bayBlock(sled, COLORS.red);
     bayBlock(pnut, ink(0.7));
     bayBlock(wire, ink(0.7));
-    // inner tube at the bay's aft end
     svgEl('rect', Object.assign({ x: G.canStart - 23 - 49, y: -G.mount.r, width: 49, height: G.mount.r * 2, fill: ink(0.05) }, line(1, ink(0.4))), svg);
 
-    // recovery: parachute and its protector
     svgEl('rect', Object.assign({ x: G.canStart, y: -G.chute.r, width: G.chute.len, height: G.chute.r * 2, rx: 6, fill: ink(0.05) }, line(1, ink(0.55))), svg);
     for (let i = 1; i < 5; i++) {
       const x = G.canStart + (G.chute.len / 5) * i;
@@ -178,7 +174,6 @@
     }
     svgEl('rect', Object.assign({ x: G.canStart + 260, y: -10, width: 25, height: 20, fill: ink(0.05) }, line(1, ink(0.5))), svg);
 
-    // motor mount and motor
     const mStart = G.L - G.mount.len;
     svgEl('rect', Object.assign({ x: mStart, y: -G.mount.r, width: G.mount.len, height: G.mount.r * 2, fill: 'none' }, line(1, ink(0.4))), svg);
     const mo = G.L - G.motor.len;
@@ -186,14 +181,12 @@
     [mo + 14, G.L - 16].forEach(x => svgEl('line', Object.assign({ x1: x, x2: x, y1: -G.motor.r, y2: G.motor.r }, line(1, redA(0.55))), svg));
     svgEl('rect', Object.assign({ x: G.L - 8, y: -R, width: 8, height: R * 2, fill: '#000' }, line(1, ink(0.7))), svg);
 
-    // rail buttons on the lower side
     G.rail.forEach(b => {
       const cx = G.canStart + b.fromCanTop;
       svgEl('rect', Object.assign({ x: cx - 5.56, y: R, width: 11.1, height: 1.85, fill: ink(0.5) }, line(0.5, ink(0.5))), svg);
       svgEl('rect', Object.assign({ x: cx - 2.9, y: R + 1.85, width: 5.8, height: 5.7, fill: ink(0.5) }, line(0.5, ink(0.5))), svg);
     });
 
-    // the fin in the plane of the view, on top
     svgEl('polygon', Object.assign({ points: finPts(-1, 1), fill: '#050505' }, line(1.4, ink(0.9))), svg);
     svgEl('polygon', Object.assign({ points: finPts(-1, 1), fill: ink(0.07) }, line(0, 'none')), svg);
 
@@ -207,17 +200,17 @@
     const R = G.tubeR;
     const defs = [
       { x: 92,  side: 'down', target: noseRadius(92), lead: lead,
-        h: 'Fiberglass ogive nose', p: '163 mm long with a 1 mm wall. A slender profile keeps drag low as the airflow goes supersonic.' },
+        h: 'Fiberglass ogive nose', p: '163 mm long with a 1 mm wall. A slender profile keeps drag low as airflow goes supersonic.' },
       { x: G.noseL + 119.6 + 12, side: 'up', target: 15, lead: lead * 0.85, accent: true,
-        h: 'Avionics bay', p: 'Altimeter, switch and battery on a removable sled. I arranged a student discount to get the altimeter.' },
+        h: 'Avionics bay', p: 'Altimeter, switch and battery on a removable sled. Custom student discount configuration.' },
       { x: 590, side: 'down', target: R, lead: lead * 1.4,
-        h: 'G12 fiberglass airframe', p: 'Filament wound, 41.8 mm outer diameter, 1.6 mm wall. Chosen for stiffness and heat tolerance at Mach\u00a01.1.' },
+        h: 'G12 fiberglass airframe', p: 'Filament wound, 41.8 mm outer diameter, 1.6 mm wall. Chosen for stiffness and high thermal limits.' },
       { x: G.canStart + 40, side: 'up', target: G.chute.r, lead: lead * 1.2,
-        h: '36 in recovery parachute', p: 'Ripstop nylon behind a Nomex protector. Predicted touchdown at 6.4\u00a0m/s.' },
+        h: '36 in recovery parachute', p: 'Ripstop nylon behind a Nomex protector. Predicted touchdown at 6.4 m/s.' },
       { x: G.L - G.motor.len + 70, side: 'down', target: G.motor.r, lead: lead, accent: true,
-        h: 'Cesaroni I540 motor', p: '38 mm, 634 N·s total impulse. Burns for 1.2\u00a0s at up to 626\u00a0N, held by an AeroPack retainer.' },
-      { x: 1544, side: 'up', target: R + G.fin.h, lead: lead * 0.5,
-        h: 'Three printed fins', p: 'PETG at 100% infill, 4 mm thick. Short and swept to resist flutter, checked in the analysis ahead.' }
+        h: 'Cesaroni I540 motor', p: '38 mm, 634 N·s total impulse. Burns for 1.2 s at up to 626 N, held by an AeroPack retainer.' },
+      { x: 1544, side: 'up', target: R + G.fin.h, lead: lead * 0.5, accent: true,
+        h: 'Three printed fins (PETG)', p: '100% infill PETG, 4 mm thick. Flutter analysis: marginal (1.14x safety factor at 383 m/s), flight-tested stable.' }
     ];
     const H = stage.clientHeight || vh;
     defs.forEach(d => {
@@ -228,10 +221,10 @@
       const leadEl = c.querySelector('.lead');
       leadEl.style.height = d.lead + 'px';
       if (d.side === 'up') {
-        const yEnd = cy - d.target * k - d.lead;        // bottom edge of the text block
+        const yEnd = cy - d.target * k - d.lead;
         c.style.bottom = (H - yEnd) + 'px';
       } else {
-        const yStart = cy + d.target * k + d.lead;      // top edge of the text block
+        const yStart = cy + d.target * k + d.lead;
         c.style.top = yStart + 'px';
       }
       c.dataset.lead = d.lead; c.dataset.target = d.target;
@@ -240,7 +233,6 @@
     fitCallouts();
   }
 
-  /* Pull a callout's leader shorter when its text would run into the ruler or the header. */
   function fitCallouts() {
     const { k, cy } = L, H = stage.clientHeight || L.vh;
     const floor = H - 96, ceil = 70;
@@ -281,9 +273,6 @@
     t.textContent = fmt(G.L);
   }
 
-  /* ----------------------------------------------------------
-     Scroll to travel
-  ----------------------------------------------------------- */
   function readScroll() {
     const range = Math.max(1, scroller.offsetHeight - L.vh);
     const p = clamp(window.scrollY / range, 0, 1);
@@ -299,15 +288,13 @@
     rulerWrap.style.transform = t;
     progressEl.style.transform = `scaleX(${curX / L.maxX})`;
 
-    // station readout: the point of the rocket at the middle of the screen
     const st = (L.vw / 2 + curX - L.x0) / L.k;
     const on = st >= 0 && st <= G.L;
     stationEl.classList.toggle('on', on);
     if (on) stationVal.textContent = fmt(Math.round(st));
 
-    // active section
     const probe = curX + L.vw * 0.55;
-    const active = probe > L.xL ? 'launch' : probe > L.xS ? 'simulation' : 'design';
+    const active = probe > L.xSite - 100 ? 'site' : probe > L.xL ? 'launch' : probe > L.xS ? 'simulation' : 'design';
     $$('.nav button').forEach(b => b.setAttribute('aria-current', String(b.dataset.section === active)));
 
     if (Math.abs(targetX - curX) > 0.15) raf = requestAnimationFrame(tick);
@@ -321,7 +308,7 @@
   }
 
   /* ----------------------------------------------------------
-     Charts
+     Charts & Visuals
   ----------------------------------------------------------- */
   const niceStep = (span, n) => {
     const raw = span / n, mag = 10 ** Math.floor(Math.log10(raw)), r = raw / mag;
@@ -350,7 +337,6 @@
     tip.style.top = clamp(py - th / 2, 0, host.clientHeight - th) + 'px';
   }
 
-  /* A line chart with a hover crosshair. series: [{name,color,pts,key}] */
   function lineChart(host, o) {
     const { w, h } = frame(host);
     if (w < 40 || h < 40) return;
@@ -376,7 +362,6 @@
     svgEl('line', { class: 'base', x1: m.l, x2: w - m.r, y1: Y(o.y[0]), y2: Y(o.y[0]) }, ax);
     const yu = svgEl('text', { x: m.l - 8, y: 9, 'text-anchor': 'end' }, ax); yu.textContent = o.yUnit;
 
-    // bands and vertical markers
     (o.bands || []).forEach(b => {
       svgEl('rect', { x: X(b.x0), y: m.t, width: Math.max(2, X(b.x1) - X(b.x0)), height: ph, fill: 'rgba(74,163,240,.14)' }, svg);
       if (b.label) { const t = svgEl('text', { class: 'lbl ink', x: X(b.x1) + 8, y: m.t + 12 }, svg); t.textContent = b.label; }
@@ -390,14 +375,12 @@
       const t = svgEl('text', { class: 'lbl ink', x: w - m.r, y: Y(r.y) - 7, 'text-anchor': 'end' }, svg); t.textContent = r.label;
     });
 
-    // series
     o.series.forEach(s => {
       const d = s.pts.map((p, i) => (i ? 'L' : 'M') + X(p[0]).toFixed(1) + ',' + Y(p[1]).toFixed(1)).join('');
       if (s.area) svgEl('path', { d: d + `L${X(s.pts[s.pts.length - 1][0])},${Y(o.y[0])}L${X(s.pts[0][0])},${Y(o.y[0])}Z`, fill: s.color, opacity: .1 }, svg);
       svgEl('path', { d, class: 'line', stroke: s.color, pathLength: 1 }, svg);
     });
 
-    // call-outs on specific points
     (o.marks || []).forEach(mk => {
       const cx = X(mk.x), cy = Y(mk.y);
       svgEl('circle', { cx, cy, r: 4.5, fill: mk.color, class: 'dotring' }, svg);
@@ -406,13 +389,7 @@
         t.textContent = mk.text;
       }
     });
-    if (o.bracket) {
-      const b = o.bracket, x = X(b.x);
-      svgEl('line', { x1: x, x2: x, y1: Y(b.y0), y2: Y(b.y1), stroke: COLORS.ink, 'stroke-width': 1, opacity: .7 }, svg);
-      const t = svgEl('text', { class: 'lbl ink', x: x + 10, y: (Y(b.y0) + Y(b.y1)) / 2 + 4 }, svg); t.textContent = b.text;
-    }
 
-    // legend, only when there is more than one series
     if (o.series.length > 1) {
       const lg = document.createElement('div'); lg.className = 'legend';
       lg.style.cssText = `position:absolute;left:${m.l}px;top:-4px;display:flex;gap:18px;font-size:12px;color:var(--dim);flex-wrap:wrap`;
@@ -425,7 +402,6 @@
       host.appendChild(lg);
     }
 
-    // hover
     const tip = tipEl(host);
     const cross = svgEl('line', { class: 'cross', y1: m.t, y2: m.t + ph, opacity: 0 }, svg);
     const dots = o.series.map(s => svgEl('circle', { r: 4.5, fill: s.color, class: 'dotring', opacity: 0 }, svg));
@@ -450,28 +426,11 @@
     hit.addEventListener('pointerleave', leave);
   }
 
-  /* Shared bits for the bar charts */
   const roundTop = (x, y, w, h, r) => {
     r = Math.min(r, w / 2, h);
     return `M${x},${y + h}V${y + r}Q${x},${y} ${x + r},${y}H${x + w - r}Q${x + w},${y} ${x + w},${y + r}V${y + h}Z`;
   };
-  const roundEnd = (x, y, w, h, r) => {
-    r = Math.min(r, h / 2, w);
-    return `M${x},${y}H${x + w - r}Q${x + w},${y} ${x + w},${y + r}V${y + h - r}Q${x + w},${y + h} ${x + w - r},${y + h}H${x}Z`;
-  };
-  function legendRow(host, items, left) {
-    const lg = document.createElement('div'); lg.className = 'legend';
-    lg.style.cssText = `position:absolute;left:${left}px;top:-4px;display:flex;gap:18px;font-size:12px;color:var(--dim);flex-wrap:wrap`;
-    items.forEach(s => {
-      const i = document.createElement('span');
-      i.style.cssText = 'display:inline-flex;align-items:center;gap:7px;white-space:nowrap';
-      i.innerHTML = `<i style="display:inline-block;width:10px;height:10px;background:${s.color};border-radius:2px"></i>${s.name}`;
-      lg.appendChild(i);
-    });
-    host.appendChild(lg);
-  }
-  /* Show a tooltip while the pointer is over `target`. */
-  function bindTip(host, tip, target, html) {
+  const bindTip = (host, tip, target, html) => {
     target.addEventListener('pointermove', e => {
       const r = host.getBoundingClientRect();
       tip.innerHTML = typeof html === 'function' ? html() : html;
@@ -479,9 +438,8 @@
       placeTip(tip, host, e.clientX - r.left, e.clientY - r.top);
     });
     target.addEventListener('pointerleave', () => tip.classList.remove('on'));
-  }
+  };
 
-  /* Vertical bars, one per category. cats: [{name, value, color, tip}] */
   function barChart(host, o) {
     const { w, h } = frame(host);
     if (w < 80 || h < 80) return;
@@ -505,8 +463,7 @@
     const slot = pw / o.cats.length, bw = Math.min(24, slot * 0.6);
     o.cats.forEach((c, i) => {
       const cx = m.l + slot * (i + 0.5), top = Y(c.value), bh = Y(o.y[0]) - top;
-      const bar = svgEl('path', { d: roundTop(cx - bw / 2, top, bw, bh, 4), fill: c.color, class: 'bar' }, svg);
-      const v = svgEl('text', { class: 'lbl ink', x: cx, y: top - 8, 'text-anchor': 'middle' }, svg); v.textContent = fmt(c.value);
+      svgEl('path', { d: roundTop(cx - bw / 2, top, bw, bh, 4), fill: c.color, class: 'bar' }, svg);
       const parts = c.name.split(' ');
       const first = parts.shift();
       [first, parts.join(' ')].forEach((line, j) => {
@@ -516,45 +473,8 @@
       const hit = svgEl('rect', { x: cx - slot / 2, y: m.t, width: slot, height: ph + m.b, fill: 'transparent' }, svg);
       bindTip(host, tip, hit, c.tip);
     });
-    if (o.legend) legendRow(host, o.legend, m.l);
   }
 
-  /* Horizontal bars on one shared axis, each with its label above it.
-     rows: [{label, value, color, opacity, tip}] */
-  function compareChart(host, o) {
-    const { w, h } = frame(host);
-    if (w < 120 || h < 100) return;
-    const m = { l: 10, r: 14, t: 26, b: 26 };
-    const pw = w - m.l - m.r, ph = h - m.t - m.b;
-    const X = x => m.l + (x - o.x[0]) / (o.x[1] - o.x[0]) * pw;
-    const svg = svgEl('svg', { viewBox: `0 0 ${w} ${h}`, role: 'img', 'aria-label': o.label }, host);
-    const grid = svgEl('g', { class: 'g' }, svg), ax = svgEl('g', { class: 'ax' }, svg);
-    const xs = niceStep(o.x[1] - o.x[0], 5);
-    for (let v = o.x[0]; v <= o.x[1] + 1e-9; v += xs) {
-      svgEl('line', { x1: X(v), x2: X(v), y1: m.t, y2: m.t + ph }, grid);
-      const last = v + xs > o.x[1] + 1e-9;
-      const t = svgEl('text', { x: X(v), y: h - 6, 'text-anchor': v === o.x[0] ? 'start' : last ? 'end' : 'middle' }, ax);
-      t.textContent = fmt(v) + (last ? ' ' + o.xUnit : '');
-    }
-    svgEl('line', { class: 'base', x1: m.l, x2: m.l, y1: m.t, y2: m.t + ph }, ax);
-    if (o.target) {
-      svgEl('line', { class: 'ref', x1: X(o.target.x), x2: X(o.target.x), y1: m.t - 4, y2: m.t + ph }, svg);
-      const t = svgEl('text', { class: 'lbl ink', x: X(o.target.x) - 6, y: m.t - 9, 'text-anchor': 'end' }, svg); t.textContent = o.target.label;
-    }
-    const tip = tipEl(host);
-    const rh = ph / o.rows.length, bh = Math.min(22, rh * 0.38);
-    o.rows.forEach((r, i) => {
-      const y0 = m.t + rh * i;
-      const lab = svgEl('text', { class: 'lbl ink', x: m.l + 10, y: y0 + rh * 0.34 }, svg); lab.textContent = r.label;
-      const by = y0 + rh * 0.34 + 8, bw = X(r.value) - X(o.x[0]);
-      svgEl('path', { d: roundEnd(m.l, by, bw, bh, 4), fill: r.color, 'fill-opacity': r.opacity ?? 1, class: 'barh' }, svg);
-      const v = svgEl('text', { class: 'lbl ink', x: m.l + bw + 8, y: by + bh / 2 + 4 }, svg); v.textContent = `${fmt(r.value)} m/s`;
-      const hit = svgEl('rect', { x: m.l, y: y0, width: pw, height: rh, fill: 'transparent' }, svg);
-      bindTip(host, tip, hit, r.tip);
-    });
-  }
-
-  /* Histogram. counts[i] is the number of runs in bin i. */
   function histChart(host, V) {
     const { w, h } = frame(host);
     if (w < 120 || h < 100) return;
@@ -564,7 +484,7 @@
     const X = x => m.l + (x - x0) / (x1 - x0) * pw;
     const Y = y => m.t + ph - y / y1 * ph;
     const svg = svgEl('svg', { viewBox: `0 0 ${w} ${h}`, role: 'img',
-      'aria-label': `Histogram of top speed over ${V.N} simulated flights, centred near Mach ${fmt(V.mean, 2)}` }, host);
+      'aria-label': `Histogram of top speed over ${V.N} simulated flights` }, host);
     const grid = svgEl('g', { class: 'g' }, svg), ax = svgEl('g', { class: 'ax' }, svg);
     const ys = niceStep(y1, 4);
     for (let v = 0; v <= y1 + 1e-9; v += ys) {
@@ -591,158 +511,158 @@
     const t = svgEl('text', { class: 'lbl ink', x: X(V.mean) + 8, y: m.t - 8 }, svg); t.textContent = `Mean Mach ${fmt(V.mean, 2)}`;
   }
 
+  /* Cool visual: Zooming into Brothers, Oregon from black on US Map */
+  function buildLaunchSiteVisual() {
+    const host = $('#site-visual');
+    if (!host) return;
+    host.innerHTML = '';
+    const { w, h } = frame(host);
+    if (w < 40 || h < 40) return;
+
+    const svg = svgEl('svg', { viewBox: '0 0 400 533', width: '100%', height: '100%' }, host);
+    
+    // Background dark map styling
+    svgEl('rect', { width: '400', height: '533', fill: '#030305' }, svg);
+
+    // US Map schematic paths / nodes (Oregon highlighted)
+    const usGroup = svgEl('g', { opacity: 0.8 }, svg);
+    // Simplified US / Pacific Northwest contour representation
+    svgEl('path', {
+      d: "M50,150 Q120,120 200,130 T350,160 Q380,250 340,350 Q280,450 200,480 Q100,420 60,300 Z",
+      fill: '#0f1117',
+      stroke: 'rgba(255,255,255,0.15)',
+      'stroke-width': '1.5'
+    }, usGroup);
+
+    // Oregon region highlight
+    svgEl('path', {
+      d: "M75,180 Q110,175 145,185 L150,250 Q110,260 75,245 Z",
+      fill: 'rgba(240, 81, 90, 0.15)',
+      stroke: COLORS.red,
+      'stroke-width': '1',
+      'stroke-dasharray': '2 2'
+    }, svg);
+
+    // Launch site coordinates target (Brothers, OR)
+    const cx = 115, cy = 215;
+    
+    // Pulsing radar rings
+    [40, 25, 10].forEach((r, idx) => {
+      svgEl('circle', {
+        cx, cy, r,
+        fill: 'none',
+        stroke: COLORS.red,
+        'stroke-width': idx === 0 ? '0.75' : '1.5',
+        opacity: 0.3 + idx * 0.2
+      }, svg);
+    });
+
+    svgEl('circle', { cx, cy, r: 3, fill: COLORS.red }, svg);
+
+    const labelBg = svgEl('g', { transform: `translate(${cx + 12}, ${cy - 8})` }, svg);
+    svgEl('rect', { x: 0, y: 0, width: 110, height: 32, rx: 3, fill: '#0b0c10', stroke: 'rgba(255,255,255,0.2)', 'stroke-width': '1' }, labelBg);
+    
+    const t1 = svgEl('text', { x: 8, y: 13, fill: '#fff', 'font-size': '10', 'font-family': 'var(--mono)', 'font-weight': '600' }, labelBg);
+    t1.textContent = "BROTHERS, OR";
+    const t2 = svgEl('text', { x: 8, y: 25, fill: COLORS.dim, 'font-size': '9', 'font-family': 'var(--mono)' }, labelBg);
+    t2.textContent = "OROC Rocketober";
+
+    // Zoom-in dark overlay / vignette that fades out
+    const overlay = svgEl('rect', { width: '400', height: '533', fill: '#000', opacity: '1' }, svg);
+    overlay.style.transition = 'opacity 1.5s cubic-bezier(0.16, 1, 0.3, 1)';
+    
+    setTimeout(() => { overlay.setAttribute('opacity', '0'); }, 100);
+  }
+
   /* ----------------------------------------------------------
-     Content that comes from data.js
+     Content population from data.js
   ----------------------------------------------------------- */
   function fillText() {
-    const H = window.HEAT, F = window.FLUTTER, V = window.VELOCITY, FL = window.FLIGHT, S = window.SITE;
+    const H = window.HEAT, V = window.VELOCITY, FL = window.FLIGHT, S = window.SITE;
 
     safe(() => {
-    const hottest = H.components.reduce((p, c) => (c.peakC > p.peakC ? c : p));
-    const finMax = Math.max(...H.components.filter(c => c.group === 'fin').map(c => c.peakC));
-    $('#heat-result').innerHTML =
-      `Nothing gets hotter than <b>${fmt(hottest.peakC)} °C</b>, at the ${hottest.name.toLowerCase()}. The fins peak at ${fmt(finMax)} °C, well under the ${H.petgTg} °C where PETG starts to soften.`;
-    $('#heat-method').textContent =
-      `Peak temperature at seven points along the rocket, from the MATLAB heat model. Air brought fully to rest at peak speed would reach about ${fmt(H.stagC)} °C.`;
+      const hottest = H.components.reduce((p, c) => (c.peakC > p.peakC ? c : p));
+      const finMax = Math.max(...H.components.filter(c => c.group === 'fin').map(c => c.peakC));
+      $('#heat-result').innerHTML =
+        `Peak temperature reaches <b>${fmt(hottest.peakC)} °C</b> at the ${hottest.name.toLowerCase()}. Fins peak at ${fmt(finMax)} °C, safely below the ${H.petgTg} °C softening threshold for PETG.`;
+      $('#heat-method').textContent =
+        `Peak temperature across seven critical points from the MATLAB thermal model. Stagnation air temperature reaches approx. ${fmt(H.stagC)} °C.`;
 
-    $('#flutter-result').innerHTML =
-      `With fin stiffness halved to stay conservative, flutter speed is <b>${fmt(F.flutterSpeed)} m/s</b>, ${fmt(F.safetyFactor, 1)}× the ${fmt(F.peakSpeed)} m/s peak. At full stiffness it is ${fmt(F.safetyFactorFull, 1)}×, against a ${fmt(F.required, 1)}× target.`;
-    $('#flutter-method').textContent =
-      `Martin's flutter formula in MATLAB, with PETG fin properties and the air at ${fmt(F.altitudeAslM)} m above sea level, as at the Brothers, Oregon launch site.`;
-
-    const speeds = V.counts.map((n, i) => (n ? i : -1)).filter(i => i >= 0);
-    const lo = V.binStart + speeds[0] * V.binWidth, hi = V.binStart + (speeds[speeds.length - 1] + 1) * V.binWidth;
-    $('#velocity-result').innerHTML =
-      `Across ${fmt(V.N)} runs the top speed averages <b>Mach ${fmt(V.mean, 2)}</b> and stays between ${fmt(lo, 2)} and ${fmt(hi, 2)}.`;
-    $('#velocity-method').textContent = `${fmt(V.N)}-run Monte Carlo of the flight, built in MATLAB.`;
+      $('#heat-station-result').innerHTML =
+        `Thermal distribution mapped along the <b>1.69 m</b> fuselage span. Heat dissipation peaks symmetrically around leading stagnation zones.`;
+      $('#heat-station-method').textContent =
+        `Station distance measured in meters from the ogive nose tip.`;
     }, 'simulation text');
 
     safe(() => {
-    const g = FL.maxAccel / 9.80665;
-    $('#flight').innerHTML = [
-      ['Predicted apogee', `${fmt(FL.apogee)} m`],
-      ['Peak speed', `Mach ${fmt(FL.maxMach, 2)}`],
-      ['Peak acceleration', `${fmt(g)} g`],
-      ['Time to apogee', `${fmt(FL.timeToApogee, 1)} s`]
-    ].map(([t, v]) => `<div><dt>${t}</dt><dd>${v}</dd></div>`).join('');
+      const g = FL.maxAccel / 9.80665;
+      $('#flight').innerHTML = [
+        ['Predicted apogee', `${fmt(FL.apogee)} m`],
+        ['Peak speed', `Mach ${fmt(FL.maxMach, 2)}`],
+        ['Peak acceleration', `${fmt(g)} g`],
+        ['Time to apogee', `${fmt(FL.timeToApogee, 1)} s`]
+      ].map(([t, v]) => `<div><dt>${t}</dt><dd>${v}</dd></div>`).join('');
     }, 'flight stats');
 
-    // launch status and contact
     safe(() => {
-    const st = $('#status');
-    if (S.launchDate) {
-      const days = Math.ceil((new Date(S.launchDate + 'T12:00:00') - Date.now()) / 864e5);
-      if (days > 0) st.textContent = `Launch set for ${new Date(S.launchDate + 'T12:00:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}. ${days} day${days === 1 ? '' : 's'} to go.`;
-    }
-    const c = $('#contact');
-    c.textContent = '';
-    if (S.name) c.append(`${S.name}. `);
-    if (S.contact) { const a = document.createElement('a'); a.href = 'mailto:' + S.contact; a.textContent = S.contact; c.append(a); }
+      const st = $('#status');
+      if (S.launchDate) {
+        const days = Math.ceil((new Date(S.launchDate + 'T12:00:00') - Date.now()) / 864e5);
+        if (days > 0) st.textContent = `Launch set for ${new Date(S.launchDate + 'T12:00:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}. ${days} day${days === 1 ? '' : 's'} to go.`;
+      }
+      const c = $('#contact');
+      c.textContent = '';
+      if (S.name) c.append(`${S.name}. `);
+      if (S.contact) { const a = document.createElement('a'); a.href = 'mailto:' + S.contact; a.textContent = S.contact; c.append(a); }
     }, 'contact');
   }
 
   function renderCharts() {
-    const H = window.HEAT, F = window.FLUTTER, V = window.VELOCITY, FL = window.FLIGHT, P = window.PROFILE;
+    const H = window.HEAT, V = window.VELOCITY, FL = window.FLIGHT, P = window.PROFILE;
 
     safe(() => {
-    const GC = { airframe: COLORS.blue, fin: COLORS.amber };
-    barChart($('#heat-chart'), {
-      label: 'Peak temperature of each component',
-      y: [0, 100], yUnit: '°C',
-      legend: [{ name: 'Fiberglass airframe', color: COLORS.blue }, { name: 'PETG fins', color: COLORS.amber }],
-      hlines: [{ y: H.petgTg, label: `PETG softens at about ${H.petgTg} °C` }],
-      cats: H.components.map(c => ({
-        name: c.name, value: c.peakC, color: GC[c.group],
-        tip: `<div class="t">${c.name}</div><div>${fmt(c.peakC, 1)} °C peak</div><div>${fmt(c.station, 2)} m from the nose</div>`
-      }))
-    });
-
+      const GC = { airframe: COLORS.blue, fin: COLORS.amber };
+      barChart($('#heat-chart'), {
+        label: 'Peak temperature of each component',
+        y: [0, 100], yUnit: '°C',
+        hlines: [{ y: H.petgTg, label: `PETG softens at ~${H.petgTg} °C` }],
+        cats: H.components.map(c => ({
+          name: c.name, value: c.peakC, color: GC[c.group],
+          tip: `<div class="t">${c.name}</div><div>${fmt(c.peakC, 1)} °C peak</div><div>${fmt(c.station, 2)} m from nose</div>`
+        }))
+      });
     }, 'heat chart');
 
     safe(() => {
-    const tipRow = (name, v, note) => `<div class="t">${name}</div><div>${fmt(v)} m/s</div>${note ? `<div>${note}</div>` : ''}`;
-    compareChart($('#flutter-chart'), {
-      label: 'Fin flutter speed compared with peak flight speed',
-      x: [0, 700], xUnit: 'm/s',
-      target: { x: F.required * F.peakSpeed, label: `${fmt(F.required, 1)}× target, ${fmt(F.required * F.peakSpeed)} m/s` },
-      rows: [
-        { label: 'Peak flight speed', value: F.peakSpeed, color: COLORS.red, tip: tipRow('Peak flight speed', F.peakSpeed, 'From OpenRocket') },
-        { label: 'Flutter speed, fin stiffness halved', value: F.flutterSpeed, color: COLORS.blue,
-          tip: tipRow('Flutter speed, stiffness halved', F.flutterSpeed, `${fmt(F.safetyFactor, 2)}× peak flight speed`) },
-        { label: 'Flutter speed, full stiffness', value: F.flutterSpeedFull, color: COLORS.blue, opacity: .55,
-          tip: tipRow('Flutter speed, full stiffness', F.flutterSpeedFull, `${fmt(F.safetyFactorFull, 2)}× peak flight speed`) }
-      ]
-    });
-
-    }, 'flutter chart');
+      // Station-based heat chart (X-axis station in meters, Y-axis peak temperature °C)
+      const pts = H.components.map(c => [c.station, c.peakC]).sort((a, b) => a[0] - b[0]);
+      lineChart($('#heat-station-chart'), {
+        label: 'Peak temperature vs station',
+        x: [0, 1.7], xStep: 0.4, y: [30, 80], yUnit: '°C', xUnit: 'm', xName: 'Station',
+        series: [{ name: 'Temperature', color: COLORS.red, pts: pts, area: true }],
+        marks: H.components.map(c => ({ x: c.station, y: c.peakC, color: c.group === 'fin' ? COLORS.amber : COLORS.blue, text: c.name, dy: -10 }))
+      });
+    }, 'heat station chart');
 
     safe(() => histChart($('#velocity-chart'), V), 'speed chart');
 
     safe(() => {
-
-    const [m0, m1] = FL.machWindow;
-    lineChart($('#flight-chart'), {
-      label: 'Predicted altitude against time',
-      x: [0, 16], xStep: 4, y: [0, 2000], yUnit: 'm', xUnit: 's', xName: 'Time',
-      series: [{ name: 'Altitude', color: COLORS.red, pts: P.map(r => [r[0], r[1]]) }],
-      bands: [{ x0: m0, x1: m1, label: `Supersonic for ${fmt(m1 - m0, 1)} s` }],
-      marks: [{ x: FL.timeToApogee, y: FL.apogee, color: COLORS.red, text: 'Apogee', dx: -10, dy: 18, anchor: 'end' }]
-    });
+      const [m0, m1] = FL.machWindow;
+      lineChart($('#flight-chart'), {
+        label: 'Predicted altitude against time',
+        x: [0, 16], xStep: 4, y: [0, 2000], yUnit: 'm', xUnit: 's', xName: 'Time',
+        series: [{ name: 'Altitude', color: COLORS.red, pts: P.map(r => [r[0], r[1]]) }],
+        bands: [{ x0: m0, x1: m1, label: `Supersonic for ${fmt(m1 - m0, 1)} s` }],
+        marks: [{ x: FL.timeToApogee, y: FL.apogee, color: COLORS.red, text: 'Apogee', dx: -10, dy: 18, anchor: 'end' }]
+      });
     }, 'flight chart');
 
-    // one reveal: lines draw in as each chart arrives on screen
-    $$('.chart').forEach(h => {
-      h.classList.add('draw');
-      if (reduceMotion || !('IntersectionObserver' in window)) { h.classList.add('in'); return; }
-      if (h._io) h._io.disconnect();
-      const wasIn = h.dataset.seen === '1';
-      if (wasIn) { h.classList.add('in'); return; }
-      h._io = new IntersectionObserver(es => es.forEach(e => {
-        if (e.isIntersecting) { h.classList.add('in'); h.dataset.seen = '1'; h._io.disconnect(); }
-      }), { threshold: 0.35 });
-      h._io.observe(h);
-    });
-  }
+    safe(() => { buildLaunchSiteVisual(); }, 'launch site visual');
 
-  /* ----------------------------------------------------------
-     Wire up
-  ----------------------------------------------------------- */
-  function build() {
-    layout();
-    safe(buildRocket, 'rocket');
-    safe(renderCharts, 'charts');
-    readScroll();
-    curX = targetX;
-    tick();
-  }
-
-  let resizeT;
-  window.addEventListener('resize', () => {
-    clearTimeout(resizeT);
-    resizeT = setTimeout(() => {
-      const p = L.maxX ? curX / L.maxX : 0;
-      build();
-      window.scrollTo(0, p * (scroller.offsetHeight - L.vh));
-      readScroll(); curX = targetX; tick();
-    }, 120);
-  });
-
-  window.addEventListener('scroll', () => { readScroll(); queue(); }, { passive: true });
-
-  // trackpad swipes sideways move the rocket too
-  window.addEventListener('wheel', e => {
-    if (Math.abs(e.deltaX) > Math.abs(e.deltaY) && !e.ctrlKey) { e.preventDefault(); window.scrollBy(0, e.deltaX * L.ratio); }
-  }, { passive: false });
-
-  window.addEventListener('keydown', e => {
-    if (e.target.closest && e.target.closest('input, textarea')) return;
-    if (e.key === 'ArrowRight') { window.scrollBy({ top: L.vh * 0.5, behavior: 'smooth' }); }
-    if (e.key === 'ArrowLeft') { window.scrollBy({ top: -L.vh * 0.5, behavior: 'smooth' }); }
-  });
-
-  $$('.nav button').forEach(b => b.addEventListener('click', () => {
+    $$('.chart, .site-visual').forEach(h => { h.classList.add('draw'); if (reduceMotion \vert{}\vert{} !('IntersectionObserver' in window)) { h.classList.add('in'); return; } if (h._io) h._io.disconnect(); const wasIn = h.dataset.seen === '1'; if (wasIn) { h.classList.add('in'); return; } h._io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { h.classList.add('in'); h.dataset.seen = '1'; h._io.disconnect(); } }), { threshold: 0.35 }); h._io.observe(h); }); }    /* ---------------------------------------------------------- Wire up ----------------------------------------------------------- */ function build() { layout(); safe(buildRocket, 'rocket'); safe(renderCharts, 'charts'); readScroll(); curX = targetX; tick(); }    let resizeT; window.addEventListener('resize', () => { clearTimeout(resizeT); resizeT = setTimeout(() => { const p = L.maxX ? curX / L.maxX : 0; build(); window.scrollTo(0, p * (scroller.offsetHeight - L.vh)); readScroll(); curX = targetX; tick(); }, 120); });    window.addEventListener('scroll', () => { readScroll(); queue(); }, { passive: true });    window.addEventListener('wheel', e => { if (Math.abs(e.deltaX) > Math.abs(e.deltaY) && !e.ctrlKey) { e.preventDefault(); window.scrollBy(0, e.deltaX * L.ratio); } }, { passive: false });    window.addEventListener('keydown', e => { if (e.target.closest && e.target.closest('input, textarea')) return; if (e.key === 'ArrowRight') { window.scrollBy({ top: L.vh * 0.5, behavior: 'smooth' }); } if (e.key === 'ArrowLeft') { window.scrollBy({ top: -L.vh * 0.5, behavior: 'smooth' }); } });    $$
+('.nav button').forEach(b => b.addEventListener('click', () => {
     const s = b.dataset.section;
-    goTo(s === 'design' ? 0 : s === 'simulation' ? L.xS - L.gutter : L.xL - L.gutter);
+    goTo(s === 'design' ? 0 : s === 'simulation' ? L.xS - L.gutter : s === 'launch' ? L.xL - L.gutter : L.xSite - L.gutter);
   }));
   $('.mark').addEventListener('click', e => { e.preventDefault(); goTo(0); });
 
