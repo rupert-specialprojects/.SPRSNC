@@ -74,7 +74,7 @@
     const pw = compact ? Math.min(vw * 0.84, 380) : clamp(vw * 0.42, 440, 620);
     const panelGap = compact ? 36 : 64;
     const xS = x0 + rocketW + (compact ? 56 : Math.max(120, vw * 0.09));
-    const simsW = pw * 2 + panelGap; // Two simulation panels now
+    const simsW = pw * 3 + panelGap * 2; // Three simulation panels total
 
     const photoH = compact ? panelH * 0.32 : panelH;
     const photoW = photoH * 0.75;
@@ -87,7 +87,7 @@
     const xSite = xL + launchW + (compact ? 56 : 112);
     const trackW = xSite + siteW + (compact ? gutter : Math.max(vw * 0.08, 40));
 
-    Object.assign(L, { vw, vh, compact, k, cy, x0, rocketW, xS, xL, xSite, trackW, gutter,
+    Object.assign(L, { vw, vh, compact, k, cy, x0, rocketW, xS, simsW, xL, xSite, siteW, trackW, gutter,
       maxX: Math.max(1, trackW - vw), pw, top });
 
     const root = document.documentElement.style;
@@ -511,7 +511,6 @@
     const t = svgEl('text', { class: 'lbl ink', x: X(V.mean) + 8, y: m.t - 8 }, svg); t.textContent = `Mean Mach ${fmt(V.mean, 2)}`;
   }
 
-  /* Cool visual: Zooming into Brothers, Oregon from black on US Map */
   function buildLaunchSiteVisual() {
     const host = $('#site-visual');
     if (!host) return;
@@ -521,12 +520,9 @@
 
     const svg = svgEl('svg', { viewBox: '0 0 400 533', width: '100%', height: '100%' }, host);
     
-    // Background dark map styling
     svgEl('rect', { width: '400', height: '533', fill: '#030305' }, svg);
 
-    // US Map schematic paths / nodes (Oregon highlighted)
     const usGroup = svgEl('g', { opacity: 0.8 }, svg);
-    // Simplified US / Pacific Northwest contour representation
     svgEl('path', {
       d: "M50,150 Q120,120 200,130 T350,160 Q380,250 340,350 Q280,450 200,480 Q100,420 60,300 Z",
       fill: '#0f1117',
@@ -534,7 +530,6 @@
       'stroke-width': '1.5'
     }, usGroup);
 
-    // Oregon region highlight
     svgEl('path', {
       d: "M75,180 Q110,175 145,185 L150,250 Q110,260 75,245 Z",
       fill: 'rgba(240, 81, 90, 0.15)',
@@ -543,10 +538,8 @@
       'stroke-dasharray': '2 2'
     }, svg);
 
-    // Launch site coordinates target (Brothers, OR)
     const cx = 115, cy = 215;
     
-    // Pulsing radar rings
     [40, 25, 10].forEach((r, idx) => {
       svgEl('circle', {
         cx, cy, r,
@@ -567,7 +560,6 @@
     const t2 = svgEl('text', { x: 8, y: 25, fill: COLORS.dim, 'font-size': '9', 'font-family': 'var(--mono)' }, labelBg);
     t2.textContent = "OROC Rocketober";
 
-    // Zoom-in dark overlay / vignette that fades out
     const overlay = svgEl('rect', { width: '400', height: '533', fill: '#000', opacity: '1' }, svg);
     overlay.style.transition = 'opacity 1.5s cubic-bezier(0.16, 1, 0.3, 1)';
     
@@ -634,7 +626,6 @@
     }, 'heat chart');
 
     safe(() => {
-      // Station-based heat chart (X-axis station in meters, Y-axis peak temperature °C)
       const pts = H.components.map(c => [c.station, c.peakC]).sort((a, b) => a[0] - b[0]);
       lineChart($('#heat-station-chart'), {
         label: 'Peak temperature vs station',
