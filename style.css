@@ -11,18 +11,17 @@
   --line: rgba(255, 255, 255, .12);
   --line-strong: rgba(255, 255, 255, .3);
 
-  --red: #f0515a;       /* the forward bay, and the headline data series */
+  --red: #f0515a;
   --blue: #4aa3f0;
   --amber: #e6b84a;
 
   --sans: "Plus Jakarta Sans", "Inter", "Helvetica Neue", Arial, system-ui, sans-serif;
   --mono: "JetBrains Mono", monospace;
 
-  /* set by script.js */
-  --k: 2;               /* px per mm of rocket */
-  --cy: 440px;          /* rocket centre line */
-  --pw: 600px;          /* sim panel width */
-  --top: 112px;         /* top of panels */
+  --k: 2;
+  --cy: 440px;
+  --pw: 600px;
+  --top: 112px;
   --gutter: 6vw;
 }
 
@@ -220,7 +219,7 @@ h1 {
 .progress { position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: rgba(255,255,255,.07); }
 .progress i { display: block; height: 100%; background: var(--ink); transform-origin: left; transform: scaleX(0); opacity: .8; }
 
-/* ---------- Simulations & Launch & Site ---------- */
+/* ---------- Panels & Sections ---------- */
 
 .sims, .launch, .launch-site {
   position: absolute;
