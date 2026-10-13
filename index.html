@@ -8,8 +8,8 @@
   <meta name="theme-color" content="#000000">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=3">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=4">
 </head>
 <body>
 
@@ -19,6 +19,7 @@
     <button type="button" data-section="design">Design</button>
     <button type="button" data-section="simulation">Simulation</button>
     <button type="button" data-section="launch">Launch</button>
+    <button type="button" data-section="site">Site</button>
   </nav>
 </header>
 
@@ -53,11 +54,12 @@
           <p class="method" id="heat-method"></p>
         </article>
 
-        <article class="panel" id="flutter">
-          <h2>Fin flutter margin</h2>
-          <p class="result" id="flutter-result"></p>
-          <div class="chart" id="flutter-chart"></div>
-          <p class="method" id="flutter-method"></p>
+        <!-- Replaced fin flutter with station-based thermal stress profile -->
+        <article class="panel" id="heat-station">
+          <h2>Thermal profile by station</h2>
+          <p class="result" id="heat-station-result"></p>
+          <div class="chart" id="heat-station-chart"></div>
+          <p class="method" id="heat-station-method"></p>
         </article>
 
         <article class="panel" id="velocity">
@@ -84,6 +86,26 @@
         </div>
       </section>
 
+      <!-- Launch Site Visual (Brothers, Oregon / OROC Rocketober) -->
+      <section class="launch-site" id="launch-site" data-name="site">
+        <div class="site-visual" id="site-visual">
+          <!-- Animated US Map Zoom to Brothers, Oregon -->
+        </div>
+        <div class="launch-body">
+          <h2>Brothers, Oregon</h2>
+          <p class="status">OROC Rocketober Launch Facility</p>
+          <p class="result">High-desert experimental airspace offering clear line-of-sight tracking and optimal recovery corridors for high-power supersonic flights.</p>
+          <dl class="flight">
+            <div><dt>Coordinates</dt><dd>43.80° N, 120.61° W</dd></div>
+            <div><dt>Elevation</dt><dd>1,414 m</dd></div>
+            <div><dt>Organization</dt><dd>OROC</dd></div>
+            <div><dt>Event</dt><dd>Rocketober</dd></div>
+          </dl>
+          <div class="chart" id="site-chart"></div>
+          <p class="method">Site meteorological profile and FAA waiver limits integrated for mission parameters.</p>
+        </div>
+      </section>
+
     </div>
 
     <!-- Scale ruler that rides with the rocket, plus the live station marker -->
@@ -98,7 +120,7 @@
 
 <noscript><p class="noscript">This portfolio scrolls sideways with JavaScript. Please enable it to view the rocket.</p></noscript>
 
-<script src="data.js?v=3"></script>
-<script src="script.js?v=3"></script>
+<script src="data.js?v=4"></script>
+<script src="script.js?v=4"></script>
 </body>
 </html>
