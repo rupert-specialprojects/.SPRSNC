@@ -20,8 +20,8 @@ window.HEAT = {
   petgTg: 80,
   stagC: 81.7,
   components: [
-    { name: "Nose tip",  station: 0.00, peakC: 67.8, group: "fin" },
-    { name: "Nose cone", station: 0.15, peakC: 53.3, group: "fin" },
+    { name: "Nose tip",  station: 0.00, peakC: 67.8, group: "airframe" },
+    { name: "Nose cone", station: 0.15, peakC: 53.3, group: "airframe" },
     { name: "Body fwd",  station: 0.16, peakC: 43.5, group: "airframe" },
     { name: "Body mid",  station: 0.79, peakC: 38.2, group: "airframe" },
     { name: "Body aft",  station: 1.60, peakC: 36.0, group: "airframe" },
