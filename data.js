@@ -23,7 +23,7 @@ window.SITE = {
    thumbnail is optional: leave it "" to use the thumbnail YouTube made,
    or give a file in this folder, e.g. "build-vlog-thumb.jpg". */
 window.VLOG = {
-  video: "",        // e.g. "https://youtu.be/dQw4w9WgXcQ" or "dQw4w9WgXcQ"
+  video: "https://www.youtube.com/watch?v=jXKhnYmLNc8",        // e.g. "https://youtu.be/dQw4w9WgXcQ" or "dQw4w9WgXcQ"
   thumbnail: ""
 };
 
