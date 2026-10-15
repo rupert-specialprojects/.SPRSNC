@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Project Supersonic</title>
+  <meta name="description" content="A supersonic rocket, designed, simulated and built from scratch. Mach 1.13 predicted on an I-class motor.">
+  <meta name="theme-color" content="#000000">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=9">
+</head>
+<body>
+
+<header class="hud">
+  <a class="mark" href="#top" data-go="0">The Spindle</a>
+  <nav class="nav" aria-label="Sections">
+    <button type="button" data-section="design">Design</button>
+    <button type="button" data-section="simulation">Simulation</button>
+    <button type="button" data-section="vlog">Build vlog</button>
+    <button type="button" data-section="launch-day">Launch Day</button>
+  </nav>
+</header>
+
+<main id="scroller" class="scroller">
+  <div class="stage" id="stage">
+
+    <div class="track" id="track">
+
+      <!-- Opening -->
+      <section class="intro" id="top" data-name="design">
+        <h1>A supersonic rocket, designed and built from scratch.</h1>
+        <p class="lede">Mach 1.13 predicted on an <span class="nb">I-class</span> motor.</p>
+        <dl class="specs">
+          <div><dt>Length</dt><dd>1.69 m</dd></div>
+          <div><dt>Diameter</dt><dd>41.8 mm</dd></div>
+          <div><dt>Liftoff mass</dt><dd>1.56 kg</dd></div>
+          <div><dt>Predicted apogee</dt><dd>1,769 m</dd></div>
+        </dl>
+        <p class="hint">Scroll to move along the rocket</p>
+      </section>
+
+      <!-- The rocket, drawn to scale from the OpenRocket file -->
+      <div class="rocket" id="rocket" aria-label="Cutaway drawing of the rocket, drawn to scale" role="img"></div>
+
+      <!-- Simulations -->
+      <section class="sims" id="simulation" data-name="simulation">
+
+        <article class="panel" id="heat">
+          <h2>Peak temperatures</h2>
+          <p class="result" id="heat-result"></p>
+          <div class="chart" id="heat-chart"></div>
+          <p class="method" id="heat-method"></p>
+        </article>
+
+        <article class="panel" id="station-profile">
+          <h2>Temperature by station</h2>
+          <p class="result" id="station-heat-result"></p>
+          <div class="chart" id="station-heat-chart"></div>
+          <p class="method" id="station-heat-method"></p>
+        </article>
+
+        <article class="panel" id="velocity">
+          <h2>Top speed distribution</h2>
+          <p class="result" id="velocity-result"></p>
+          <div class="chart" id="velocity-chart"></div>
+          <p class="method" id="velocity-method"></p>
+        </article>
+
+      </section>
+
+      <!-- Build vlog -->
+      <section class="vlog" id="vlog" data-name="vlog" aria-labelledby="vlog-title">
+        <div class="vlog-copy">
+          <p class="eyebrow">Build vlog</p>
+          <h2 id="vlog-title">Watch it<br>come together.</h2>
+          <p class="vlog-deck">From raw tube and printed fins to a finished rocket on the stand.</p>
+        </div>
+        <figure class="player" id="player">
+          <img class="player-cover" id="vlog-cover" alt="Thumbnail for the build vlog">
+          <button type="button" class="play" id="vlog-play" aria-label="Play build vlog">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.52.85l10.5-6.5a1 1 0 0 0 0-1.7L9.52 4.65A1 1 0 0 0 8 5.5Z"/></svg>
+          </button>
+        </figure>
+      </section>
+
+      <!-- Launch Day (Combined Launch Stats + Proportionally Accurate Seattle to Brothers Drive Map) -->
+      <section class="launch-day-section" id="launch-day" data-name="launch-day" aria-labelledby="launch-day-title">
+        <div class="launch-day-copy">
+          <p class="eyebrow">Launch Day / OROC Rocketober</p>
+          <h2 id="launch-day-title">Launch<br>Day</h2>
+          <p class="launch-day-event">High Desert Flight Operation</p>
+          <p class="launch-day-deck">The maiden flight of the Spindle was at OROC's Rocketober launch at Brother's Oregon. October 2026</p>
+          
+          <div class="launch-stats-box">
+            <h3>Flight Performance</h3>
+            <p class="status" id="status">Built. Awaiting launch day.</p>
+            <dl class="flight" id="flight"></dl>
+          </div>
+
+          <div class="launch-day-detail">
+            <span>ROUTE</span>
+            <strong>Seattle, WA → Brothers, OR</strong>
+          </div>
+          <p class="launch-day-note" id="contact"></p>
+        </div>
+
+        <div class="site-visual" role="img" aria-label="Proportionally accurate map showing the drive from Seattle through the Pacific Northwest to Brothers, Oregon">
+          <div class="site-visual-head"><span>ROUTE &amp; LOCATION STUDY</span><span>SEATTLE → PNW → BROTHERS</span></div>
+          <svg class="site-map" viewBox="0 0 880 540" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <defs>
+              <pattern id="map-grid" width="28" height="28" patternUnits="userSpaceOnUse">
+                <path d="M 28 0 L 0 0 0 28" fill="none" stroke="#8b969b" stroke-opacity=".11" stroke-width=".7"/>
+              </pattern>
+              <linearGradient id="pnw-wash" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#121a1c"/>
+                <stop offset=".5" stop-color="#0b1113"/>
+                <stop offset="1" stop-color="#06090a"/>
+              </linearGradient>
+              <radialGradient id="map-glow" cx="50%" cy="48%" r="65%">
+                <stop offset="0" stop-color="#f0515a" stop-opacity=".16"/>
+                <stop offset="1" stop-color="#f0515a" stop-opacity="0"/>
+              </radialGradient>
+              <filter id="pin-glow" x="-200%" y="-200%" width="500%" height="500%">
+                <feGaussianBlur stdDeviation="6" result="blur"/>
+                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+
+            <rect width="880" height="540" fill="url(#pnw-wash)"/>
+            <rect class="map-grid" width="880" height="540" fill="url(#map-grid)"/>
+            <rect width="880" height="540" fill="url(#map-glow)"/>
+
+            <!-- Topographic Elevation Relief Lines -->
+            <g class="topo-relief" fill="none" stroke="#68797c" stroke-opacity=".22" stroke-width="1.2">
+              <path d="M 230 110 Q 320 90 440 100 T 650 115"/>
+              <path d="M 225 150 Q 330 130 450 145 T 655 160"/>
+              <path d="M 220 190 Q 340 170 460 185 T 660 205"/>
+              <path d="M 218 230 Q 335 215 455 228 T 658 248"/>
+              <path d="M 222 280 Q 330 270 450 282 T 655 300"/>
+              <path d="M 225 330 Q 335 320 455 332 T 658 355"/>
+              <path d="M 230 380 Q 340 370 460 385 T 660 410"/>
+              <path d="M 240 430 Q 350 420 470 435 T 650 460"/>
+            </g>
+
+            <!-- Washington State Accurate Proportional Polygon -->
+            <g class="state-wash">
+              <path d="M 240 100 C 235 110 225 125 220 140 C 215 155 225 170 230 185 C 235 195 245 205 255 210 C 320 220 380 225 450 230 C 520 235 580 238 640 240 C 642 220 645 190 648 160 C 650 130 645 110 640 102 C 540 101 440 100 240 100 Z" fill="rgba(74,163,240,0.15)" stroke="#4aa3f0" stroke-width="2.2" stroke-linejoin="round"/>
+              <text x="380" y="155" fill="#4aa3f0" font-family="var(--mono)" font-size="14" font-weight="600" letter-spacing="2" opacity="0.85">WASHINGTON</text>
+            </g>
+
+            <!-- Oregon State Accurate Proportional Polygon -->
+            <g class="state-oregon">
+              <path d="M 255 210 C 320 220 380 225 450 230 C 520 235 580 238 640 240 C 645 280 650 340 655 390 C 570 395 480 400 390 405 C 320 408 270 410 245 405 C 242 360 238 310 235 270 C 240 250 248 230 255 210 Z" fill="rgba(74,163,240,0.11)" stroke="#4aa3f0" stroke-width="2.2" stroke-linejoin="round"/>
+              <text x="390" y="325" fill="#4aa3f0" font-family="var(--mono)" font-size="14" font-weight="600" letter-spacing="2" opacity="0.85">OREGON</text>
+            </g>
+
+            <!-- Columbia River Border -->
+            <path d="M 255 210 Q 350 222 450 230 T 640 240" fill="none" stroke="#4aa3f0" stroke-opacity=".7" stroke-width="2.5"/>
+
+            <!-- Highway Route: Seattle -> I-5 S -> Portland -> US-26/97 S -> Bend -> Brothers -->
+            <path class="route-line" d="M 310 145 Q 330 180 345 232 T 470 300 T 545 355" fill="none" stroke="#f0515a" stroke-width="3.2" stroke-dasharray="6 4" filter="url(#pin-glow)"/>
+
+            <!-- Seattle Origin Marker -->
+            <g class="map-city seattle" transform="translate(310, 145)">
+              <circle r="6" fill="#4aa3f0" stroke="#000" stroke-width="2"/>
+              <circle r="12" fill="none" stroke="#4aa3f0" stroke-width="1" opacity="0.6"/>
+              <text x="12" y="4" fill="#f3f4f5" font-family="var(--mono)" font-size="11" font-weight="500">Seattle</text>
+            </g>
+
+            <!-- Portland Marker -->
+            <g class="map-city portland" transform="translate(345, 232)">
+              <circle r="4.5" fill="#4aa3f0" stroke="#000" stroke-width="1.5"/>
+              <text x="10" y="3" fill="#a1a5ad" font-family="var(--mono)" font-size="10">Portland</text>
+            </g>
+
+            <!-- Bend Marker -->
+            <g class="map-city bend" transform="translate(470, 300)">
+              <circle r="4.5" fill="#4aa3f0" stroke="#000" stroke-width="1.5"/>
+              <text x="10" y="3" fill="#a1a5ad" font-family="var(--mono)" font-size="10">Bend</text>
+            </g>
+
+            <!-- Brothers Launch Site Marker (Pin) -->
+            <g class="map-pin brothers" transform="translate(545, 355)" filter="url(#pin-glow)">
+              <circle r="18" fill="#f0515a" fill-opacity=".2"/>
+              <circle r="7" fill="#f0515a" stroke="#fff" stroke-width="2"/>
+              <path d="M 0 7 L 0 18" stroke="#f0515a" stroke-width="2"/>
+              <circle cx="0" cy="18" r="2.5" fill="#f0515a"/>
+              <text x="14" y="5" fill="#f0515a" font-family="var(--mono)" font-size="12" font-weight="700" letter-spacing="1">Brothers (Launch Site)</text>
+            </g>
+
+            <!-- Interactive Launch Video Pop-Up Card (Bigger and Farther to the Right: translate(450, 50), width 410->420) -->
+            <g class="launch-video-popup" id="map-video-popup" transform="translate(450, 50)">
+              <rect width="420" height="280" rx="8" fill="#0b0f10" stroke="#f0515a" stroke-width="1.5" filter="url(#pin-glow)"/>
+              <rect x="0" y="0" width="420" height="32" rx="8" fill="#151d20"/>
+              <text x="14" y="21" fill="#f0515a" font-family="var(--mono)" font-size="11" font-weight="600" letter-spacing="1">▶ LAUNCH FLIGHT VIDEO (BROTHERS, OR)</text>
+              <foreignObject x="0" y="32" width="420" height="248">
+                <div xmlns="http://www.w3.org/1999/xhtml" style="width:100%;height:100%;background:#000;display:flex;align-items:center;justify-content:center;">
+                  <iframe width="420" height="248" src="https://www.youtube-nocookie.com/embed/jXKhnYmLNc8?autoplay=0&rel=0" title="Launch Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="true" style="width:100%;height:100%;display:block;"></iframe>
+                </div>
+              </foreignObject>
+            </g>
+
+            <text class="map-footer" x="850" y="520" text-anchor="end" fill="#64686f" font-family="var(--mono)" font-size="9">PACIFIC NORTHWEST GEOGRAPHIC MAP / PROPORTIONAL SCALE</text>
+          </svg>
+          <div class="site-visual-foot"><span><i></i> DRIVE: SEATTLE → BROTHERS</span><span>OROC ROCKETOBER</span></div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Scale ruler that rides with the rocket, plus the live station marker -->
+    <div class="ruler-wrap" aria-hidden="true">
+      <div class="ruler" id="ruler"></div>
+    </div>
+    <div class="station" id="station" aria-live="off"><span id="station-val">0</span><span class="u"> mm</span></div>
+
+    <div class="progress" aria-hidden="true"><i id="progress"></i></div>
+  </div>
+</main>
+
+<noscript><p class="noscript">This portfolio scrolls sideways with JavaScript. Please enable it to view the rocket.</p></noscript>
+
+<script src="data.js?v=9"></script>
+<script src="script.js?v=9"></script>
+</body>
+</html>
