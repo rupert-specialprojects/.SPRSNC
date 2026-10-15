@@ -18,6 +18,7 @@
   <nav class="nav" aria-label="Sections">
     <button type="button" data-section="design">Design</button>
     <button type="button" data-section="simulation">Simulation</button>
+    <button type="button" data-section="build">Build</button>
     <button type="button" data-section="launch">Launch</button>
     <button type="button" data-section="site">Site</button>
   </nav>
@@ -69,6 +70,25 @@
         </article>
 
       </section>
+
+      <!-- Build vlog -->
+<section class="vlog" id="vlog" data-name="build">
+  <h2 id="vlog-title">Build vlog</h2>
+  <p class="result" id="vlog-result"></p>
+  <div class="player" id="player">
+    <video id="vlog-video" preload="metadata" playsinline></video>
+    <button type="button" class="play" id="vlog-play" aria-label="Play build vlog">
+      <img class="thumb" id="vlog-thumb" alt="" draggable="false">
+      <span class="play-btn" aria-hidden="true">
+        <svg viewBox="0 0 96 96" width="96" height="96">
+          <circle cx="48" cy="48" r="44" fill="#f0515a"/>
+          <path d="M39 30 L69 48 L39 66 Z" fill="#fff"/>
+        </svg>
+      </span>
+    </button>
+  </div>
+  <p class="method" id="vlog-method"></p>
+</section>
 
       <!-- Launch -->
       <section class="launch" id="launch" data-name="launch">
