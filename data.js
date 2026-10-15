@@ -17,6 +17,17 @@ window.SITE = {
   launchDate: null                   // e.g. "2026-11-08" shows a countdown; null shows "Awaiting launch day"
 };
 
+/* VLOG
+   Build video, stored in the repo. Keep the file under GitHub's 100 MB limit
+   (25 MB if you upload through the web UI). H.264 + AAC .mp4 plays everywhere. */
+window.VLOG = {
+  src: "vlog.mp4",
+  poster: "vlog-thumb.jpg",     // 16:9 thumbnail, e.g. 1280x720
+  title: "Build vlog",
+  summary: "Building the rocket, from the first printed fin to the final fit check.",
+  caption: "Footage from the build."
+};
+
 window.FLIGHT = {"apogee": 1768.595, "maxVel": 383.291, "maxMach": 1.129, "maxAccel": 406.942, "timeToApogee": 15.53, "groundHitVel": 6.442, "railExitVel": 27.65, "burnout": 1.18, "machWindow": [0.9, 1.42], "altAtMaxMach": 223.9, "tMaxMach": 1.09, "thrustPeak": 626.0};
 
 /* Flight profile from OpenRocket: [time s, altitude m, speed m/s, Mach] */
