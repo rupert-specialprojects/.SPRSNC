@@ -586,7 +586,7 @@
       barChart($('#heat-chart'), {
         label: 'Peak temperature of each component',
         y: [0, 100], yUnit: '°C',
-        legend: [{ name: 'Fiberglass airframe', color: COLORS.blue }, { name: 'PETG fins', color: COLORS.amber }],
+        legend: [{ name: 'Fiberglass airframe', color: COLORS.blue }, { name: '3d-printed PETG', color: COLORS.amber }],
         hlines: [{ y: H.petgTg, label: `PETG softens at about ${H.petgTg} °C` }],
         cats: H.components.map(c => ({
           name: c.name, value: c.peakC, color: GC[c.group],
