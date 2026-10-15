@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Project Supersonic</title>
+  <meta name="description" content="A supersonic rocket, designed, simulated and built from scratch. Mach 1.13 predicted on an I-class motor.">
+  <meta name="theme-color" content="#000000">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=9">
+</head>
+<body>
+
+<header class="hud">
+  <a class="mark" href="#top" data-go="0">The Spindle</a>
+  <nav class="nav" aria-label="Sections">
+    <button type="button" data-section="design">Design</button>
+    <button type="button" data-section="simulation">Simulation</button>
+    <button type="button" data-section="vlog">Build vlog</button>
+    <button type="button" data-section="launch-day">Launch Day</button>
+  </nav>
+</header>
+
+<main id="scroller" class="scroller">
+  <div class="stage" id="stage">
+
+    <div class="track" id="track">
+
+      <!-- Opening -->
+      <section class="intro" id="top" data-name="design">
+        <h1>A supersonic rocket, designed and built from scratch.</h1>
+        <p class="lede">Mach 1.13 predicted on an <span class="nb">I-class</span> motor.</p>
+        <dl class="specs">
+          <div><dt>Length</dt><dd>1.69 m</dd></div>
+          <div><dt>Diameter</dt><dd>41.8 mm</dd></div>
+          <div><dt>Liftoff mass</dt><dd>1.56 kg</dd></div>
+          <div><dt>Predicted apogee</dt><dd>1,769 m</dd></div>
+        </dl>
+        <p class="hint">Scroll to move along the rocket</p>
+      </section>
+
+      <!-- The rocket, drawn to scale from the OpenRocket file -->
+      <div class="rocket" id="rocket" aria-label="Cutaway drawing of the rocket, drawn to scale" role="img"></div>
+
+      <!-- Simulations -->
+      <section class="sims" id="simulation" data-name="simulation">
+
+        <article class="panel" id="heat">
+          <h2>Peak temperatures</h2>
+          <p class="result" id="heat-result"></p>
+          <div class="chart" id="heat-chart"></div>
+          <p class="method" id="heat-method"></p>
+        </article>
+
+        <article class="panel" id="station-profile">
+          <h2>Temperature by station</h2>
+          <p class="result" id="station-heat-result"></p>
+          <div class="chart" id="station-heat-chart"></div>
+          <p class="method" id="station-heat-method"></p>
+        </article>
+
+        <article class="panel" id="velocity">
+          <h2>Top speed distribution</h2>
+          <p class="result" id="velocity-result"></p>
+          <div class="chart" id="velocity-chart"></div>
+          <p class="method" id="velocity-method"></p>
+        </article>
+
+      </section>
+
+      <!-- Build vlog -->
+      <section class="vlog" id="vlog" data-name="vlog" aria-labelledby="vlog-title">
+        <div class="vlog-copy">
+          <p class="eyebrow">Build vlog</p>
+          <h2 id="vlog-title">Watch it<br>come together.</h2>
+          <p class="vlog-deck">From raw tube and printed fins to a finished rocket on the stand.</p>
+        </div>
+        <figure class="player" id="player">
+          <img class="player-cover" id="vlog-cover" alt="Thumbnail for the build vlog">
+          <button type="button" class="play" id="vlog-play" aria-label="Play build vlog">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.52.85l10.5-6.5a1 1 0 0 0 0-1.7L9.52 4.65A1 1 0 0 0 8 5.5Z"/></svg>
+          </button>
+        </figure>
+      </section>
+
+      <!-- Launch Day (stats + launch video) -->
+      <section class="launch-day-section" id="launch-day" data-name="launch-day" aria-labelledby="launch-day-title">
+        <div class="launch-day-copy">
+          <p class="eyebrow">Launch Day / OROC Rocketober</p>
+          <h2 id="launch-day-title">Launch<br>Day</h2>
+          <p class="launch-day-event">High Desert Flight Operation</p>
+          <p class="launch-day-deck">The maiden flight of the Spindle was at OROC's Rocketober launch at Brother's Oregon. October 2026</p>
+          
+          <div class="launch-stats-box">
+            <h3>Flight Performance</h3>
+            <p class="status" id="status">Built. Awaiting launch day.</p>
+            <dl class="flight" id="flight"></dl>
+          </div>
+
+          <div class="launch-day-detail">
+            <span>ROUTE</span>
+            <strong>Seattle, WA → Brothers, OR</strong>
+          </div>
+          <p class="launch-day-note" id="contact"></p>
+        </div>
+
+        <figure class="player launch-player" id="launch-player">
+          <img class="player-cover" id="launch-cover" alt="Thumbnail for the launch video">
+          <button type="button" class="play" id="launch-play" aria-label="Play launch video">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.52.85l10.5-6.5a1 1 0 0 0 0-1.7L9.52 4.65A1 1 0 0 0 8 5.5Z"/></svg>
+          </button>
+        </figure>
+      </section>
+
+    </div>
+
+    <!-- Scale ruler that rides with the rocket, plus the live station marker -->
+    <div class="ruler-wrap" aria-hidden="true">
+      <div class="ruler" id="ruler"></div>
+    </div>
+    <div class="station" id="station" aria-live="off"><span id="station-val">0</span><span class="u"> mm</span></div>
+
+    <div class="progress" aria-hidden="true"><i id="progress"></i></div>
+  </div>
+</main>
+
+<noscript><p class="noscript">This portfolio scrolls sideways with JavaScript. Please enable it to view the rocket.</p></noscript>
+
+<script src="data.js?v=9"></script>
+<script src="script.js?v=9"></script>
+</body>
+</html>
