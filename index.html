@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=6">
+  <link rel="stylesheet" href="style.css?v=7">
 </head>
 <body>
 
@@ -19,8 +19,7 @@
     <button type="button" data-section="design">Design</button>
     <button type="button" data-section="simulation">Simulation</button>
     <button type="button" data-section="vlog">Build vlog</button>
-    <button type="button" data-section="launch">Launch</button>
-    <button type="button" data-section="site">Site</button>
+    <button type="button" data-section="launch">Launch day</button>
   </nav>
 </header>
 
@@ -71,7 +70,7 @@
 
       </section>
 
-      <!-- Build vlog: a stored video file with a thumbnail and play button -->
+      <!-- Build vlog -->
       <section class="vlog" id="vlog" data-name="vlog" aria-labelledby="vlog-title">
         <div class="vlog-copy">
           <p class="eyebrow">Build vlog</p>
@@ -79,7 +78,6 @@
           <p class="vlog-deck">From raw tube and printed fins to a finished rocket on the stand.</p>
         </div>
         <figure class="player" id="player">
-          <!-- The YouTube video is set in data.js (window.VLOG). The thumbnail and player are filled in by script.js -->
           <img class="player-cover" id="vlog-cover" alt="Thumbnail for the build vlog">
           <button type="button" class="play" id="vlog-play" aria-label="Play build vlog">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.52.85l10.5-6.5a1 1 0 0 0 0-1.7L9.52 4.65A1 1 0 0 0 8 5.5Z"/></svg>
@@ -87,36 +85,18 @@
         </figure>
       </section>
 
-      <!-- Launch -->
-      <section class="launch" id="launch" data-name="launch">
-        <figure class="photo">
-          <img src="rocket (1).png" alt="The finished rocket standing on its launch stand in morning fog" width="500" height="1333">
-        </figure>
-        <div class="launch-body">
-          <h2>Launch</h2>
+      <!-- Launch Day (Combined Launch Specs & Seattle to Brothers Route Map) -->
+      <section class="launch-day" id="launch" data-name="launch" aria-labelledby="launch-title">
+        <div class="launch-copy">
+          <p class="eyebrow">Launch Day / OROC Rocketober</p>
+          <h2 id="launch-title">Brothers,<br>Oregon.</h2>
           <p class="status" id="status">Built. Awaiting launch day.</p>
           <dl class="flight" id="flight"></dl>
-          <div class="chart" id="flight-chart"></div>
-          <p class="method">Predicted flight from OpenRocket. Results from the altimeter will go here after launch.</p>
+          <p class="method">Predicted flight telemetry from OpenRocket. Recorded post-flight altimeter data will update here after launch.</p>
           <p class="contact" id="contact"></p>
         </div>
-      </section>
-
-      <!-- Final location reveal: a schematic zoom from the United States to Brothers, Oregon -->
-      <section class="site-reveal" id="site-reveal" data-name="site" aria-labelledby="site-title">
-        <div class="site-copy">
-          <p class="eyebrow">Field location / OROC</p>
-          <h2 id="site-title">Brothers,<br>Oregon.</h2>
-          <p class="site-event">OROC Rocketober</p>
-          <p class="site-deck">A final stop at the high-desert launch site, traced from the continental U.S. into central Oregon.</p>
-          <div class="site-detail">
-            <span>DESTINATION</span>
-            <strong>Brothers, OR</strong>
-          </div>
-          <p class="site-note">Illustrative location graphic, not a navigation map or exact launch-pad pin.</p>
-        </div>
-        <div class="site-visual" role="img" aria-label="Animated schematic map zoom from the continental United States to Brothers, Oregon, for the OROC Rocketober launch">
-          <div class="site-visual-head"><span>LOCATION STUDY</span><span>OREGON · USA</span></div>
+        <div class="site-visual" role="img" aria-label="Schematic map showing continental US, PNW, and drive route from Seattle to Brothers, Oregon">
+          <div class="site-visual-head"><span>ROUTE & LOCATION STUDY</span><span>SEATTLE → BROTHERS, OR</span></div>
           <svg class="site-map" viewBox="0 0 880 540" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
             <defs>
               <pattern id="map-grid" width="28" height="28" patternUnits="userSpaceOnUse">
@@ -140,18 +120,21 @@
             <rect width="880" height="540" fill="#030404"/>
             <rect class="map-grid" width="880" height="540" fill="url(#map-grid)"/>
             <rect width="880" height="540" fill="url(#map-glow)"/>
+            <!-- Continental US Layer -->
             <g class="us-layer">
               <path class="us-outline" d="M91 127 L117 115 L141 102 L174 103 L203 108 L230 111 L253 115 L276 107 L302 110 L327 117 L350 120 L373 128 L397 135 L422 142 L447 148 L469 158 L491 166 L512 180 L530 189 L545 201 L559 202 L572 194 L583 203 L578 216 L562 227 L552 244 L552 259 L558 279 L553 296 L542 304 L535 318 L522 326 L516 334 L508 330 L501 313 L494 298 L484 291 L475 283 L465 280 L453 288 L438 292 L423 289 L410 298 L395 296 L380 300 L365 302 L351 298 L335 292 L318 294 L307 289 L299 276 L286 267 L277 253 L261 246 L246 235 L232 231 L218 220 L206 214 L198 198 L184 192 L175 177 L159 168 L149 151 L132 145 L119 136 Z"/>
               <path class="state-lines" d="M145 121 L159 168 M201 108 L206 214 M245 113 L246 235 M276 107 L277 253 M327 117 L318 294 M373 128 L365 302 M422 142 L423 289 M469 158 L453 288 M512 180 L484 291 M118 144 L159 146 L149 151 M159 146 L245 151 L327 153 L397 159 L469 177 L530 197 M175 177 L246 180 L318 184 L397 191 L475 207 M198 198 L261 210 L335 216 L410 219 L465 230"/>
-              <path class="oregon-shape" d="M104 143 L154 145 L151 166 L112 164 L104 154 Z"/>
-              <text class="map-label-small" x="88" y="184">OREGON</text>
+              <!-- PNW Highlight Region -->
+              <path class="pnw-shape" d="M104 125 L165 128 L162 178 L104 175 Z"/>
+              <text class="map-label-small" x="90" y="115">PNW / SEATTLE</text>
               <text class="map-label" x="110" y="368">UNITED STATES</text>
-              <text class="map-sub-label" x="110" y="389">CONTINENTAL VIEW</text>
-              <path class="connector-path" d="M133 155 C188 154 234 169 277 190 S306 202 330 205"/>
-              <circle class="locator-halo" cx="133" cy="155" r="17"/>
-              <circle class="locator-dot" cx="133" cy="155" r="4.2"/>
-              <path class="locator-cross" d="M133 139 V147 M133 163 V171 M117 155 H125 M141 155 H149"/>
+              <text class="map-sub-label" x="110" y="389">CONTINENTAL TO PNW VIEW</text>
+              <!-- Seattle to Brothers Drive Route -->
+              <path class="drive-route" d="M125 142 C140 160 155 185 168 210 S180 235 195 250"/>
+              <circle class="locator-dot" cx="125" cy="142" r="3.5"/>
+              <text class="map-label-small" x="135" y="145">Seattle</text>
             </g>
+            <!-- Zoom Detail: PNW into Brothers, Oregon -->
             <g class="zoom-detail" clip-path="url(#detail-clip)">
               <rect x="300" y="84" width="555" height="390" rx="7" fill="url(#local-wash)" stroke="#6d777b" stroke-opacity=".72"/>
               <rect x="300" y="84" width="555" height="390" fill="url(#map-grid)" opacity=".72"/>
@@ -174,10 +157,10 @@
               <path class="local-road" d="M330 104 C391 146 425 200 481 231 S571 284 599 323 S699 389 842 412"/>
               <path class="local-road-highlight" d="M330 104 C391 146 425 200 481 231 S571 284 599 323 S699 389 842 412"/>
               <path class="county-line" d="M397 88 L431 180 L416 279 L452 367 L441 468 M553 84 L569 174 L550 273 L588 367 L576 474 M698 84 L683 179 L710 267 L693 368 L724 474"/>
-              <text class="detail-kicker" x="332" y="119">OROC / ROCKETOBER</text>
+              <text class="detail-kicker" x="332" y="119">OROC / ROCKETOBER · SEATTLE TO BROTHERS DRIVE</text>
               <text class="detail-location" x="515" y="286">BROTHERS</text>
               <text class="detail-state" x="518" y="310">OREGON · HIGH DESERT</text>
-              <text class="detail-sub" x="332" y="440">CENTRAL OREGON</text>
+              <text class="detail-sub" x="332" y="440">CENTRAL OREGON (US-20)</text>
               <g class="detail-pin" filter="url(#pin-glow)">
                 <circle cx="497" cy="251" r="14" fill="#f0515a" fill-opacity=".16"/>
                 <circle cx="497" cy="251" r="5" fill="#f0515a"/>
@@ -185,9 +168,9 @@
               </g>
               <path class="detail-pin-stem" d="M497 265 L497 278 L510 278"/>
             </g>
-            <text class="map-footer" x="850" y="510" text-anchor="end">SCHEMATIC LOCATION VIEW / NOT FOR NAVIGATION</text>
+            <text class="map-footer" x="850" y="510" text-anchor="end">SCHEMATIC ROUTE VIEW / SEATTLE TO BROTHERS</text>
           </svg>
-          <div class="site-visual-foot"><span><i></i> SITE MARKER</span><span>OROC ROCKETOBER</span></div>
+          <div class="site-visual-foot"><span><i></i> DRIVE ROUTE</span><span>SEATTLE → PNW → BROTHERS, OR</span></div>
         </div>
       </section>
 
@@ -205,7 +188,7 @@
 
 <noscript><p class="noscript">This portfolio scrolls sideways with JavaScript. Please enable it to view the rocket.</p></noscript>
 
-<script src="data.js?v=6"></script>
-<script src="script.js?v=6"></script>
+<script src="data.js?v=7"></script>
+<script src="script.js?v=7"></script>
 </body>
 </html>
