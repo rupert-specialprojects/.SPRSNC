@@ -200,15 +200,15 @@
     const R = G.tubeR;
     const defs = [
       { x: 92,  side: 'down', target: noseRadius(92), lead: lead,
-        h: 'Fiberglass ogive nose', p: '163 mm long with a 1 mm wall. A slender profile keeps drag low as the airflow goes supersonic.' },
+        h: '3d-printed ogive nose', p: '163 mm long with a 1 mm wall. A slender profile keeps drag low as the airflow goes supersonic.' },
       { x: G.noseL + 119.6 + 12, side: 'up', target: 15, lead: lead * 0.85, accent: true,
         h: 'Avionics bay', p: 'Altimeter, switch and battery on a removable sled. I arranged a student discount to get the altimeter.' },
       { x: 590, side: 'down', target: R, lead: lead * 1.4,
         h: 'G12 fiberglass airframe', p: 'Filament wound, 41.8 mm outer diameter, 1.6 mm wall. Chosen for stiffness and heat tolerance at Mach 1.1.' },
       { x: G.canStart + 40, side: 'up', target: G.chute.r, lead: lead * 1.2,
-        h: '36 in recovery parachute', p: 'Ripstop nylon behind a Nomex protector. Predicted touchdown at 6.4 m/s.' },
+        h: '36 in recovery parachute', p: 'Ripstop nylon, predicted touchdown at 6.4 m/s.' },
       { x: G.L - G.motor.len + 70, side: 'down', target: G.motor.r, lead: lead, accent: true,
-        h: 'Cesaroni I540 motor', p: '38 mm, 634 N·s total impulse. Burns for 1.2 s at up to 626 N, held by an AeroPack retainer.' },
+        h: 'Cesaroni I540 motor', p: '38 mm, 634 N·s total impulse. Burns for 1.8 s at up to 626 N, held by an AeroPack retainer.' },
       { x: 1544, side: 'up', target: R + G.fin.h, lead: lead * 0.5, accent: true,
         tag: 'Flutter margin / marginal', h: 'Three printed fins',
         p: `PETG at 100% infill, 4 mm thick. Conservative flutter estimate: ${fmt(window.FLUTTER.flutterSpeed)} m/s (${fmt(window.FLUTTER.safetyFactor, 2)}× at a ${fmt(window.FLUTTER.peakSpeed)} m/s peak; ${fmt(window.FLUTTER.required, 1)}× target). Simulation assessment: marginal, but still flyable; calculated margin is below target.` }
